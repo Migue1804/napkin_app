@@ -112,22 +112,6 @@ with tabs[0]:
     # Reproducir el archivo de audio
     st.audio(audio_file, format="audio/mp3")
 
-
-# Sidebar
-st.sidebar.title("Datos de Entrada")
-# Función para cargar imagen y convertirla en base64
-def get_image_base64(image):
-    if isinstance(image, str):  # Si la imagen es una ruta
-        with open(image, "rb") as image_file:
-            return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
-    elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
-        buffered = io.BytesIO()
-        image = image.resize((150, 150))  # Ajustar tamaño de la imagen a 150x150 píxeles
-        image.save(buffered, format="PNG")  # Convertir imagen a bytes
-        return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
-    return None
-    
-# Función para crear el gráfico Quién/Qué con varias capas de atributos
 def crear_grafico_quien_que(nombre, categorias, imagen):
     # Crear un network graph
     G = nx.Graph()
@@ -191,7 +175,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     for edge in G.edges():
         person_net.add_edge(edge[0], edge[1])
 
-    # Configurar layout del grafo
+    # Configurar layout del grafo con centrado
     person_net.repulsion(
         node_distance=200,
         central_gravity=0.33,
@@ -199,6 +183,23 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
         spring_strength=0.10,
         damping=0.95
     )
+    
+    # Agregar opciones para mantener el gráfico centrado
+    person_net.set_options("""
+        var options = {
+            "physics": {
+                "stabilization": {
+                    "enabled": true,
+                    "iterations": 1000
+                },
+                "minVelocity": 0.75
+            },
+            "interaction": {
+                "dragNodes": true,
+                "zoomView": true
+            }
+        }
+    """)
 
     # Guardar y mostrar grafo en HTML
     path = '/tmp'
@@ -210,42 +211,139 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     # Mostrar grafo en la app con Streamlit Components
     components.html(graph_html, height=600)
 
-# Pestaña: Quién/Qué
-with tabs[1]:
-    st.header("¿Quién/Qué?")
-    st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
-
-    # Entrada de texto para el nombre
-    nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
-
-    # Imagen predeterminada si no se carga ninguna
-    imagen_predeterminada = "perfil.jpg"
-
-    # Cargar una imagen
-    imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
-    imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
-
-    # Ingreso de categorías y atributos
-    st.sidebar.write("Ingrese las diferentes categorías y atributos:")
-
-    # Crear DataFrame editable para las categorías
-    example_data = {
-        "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
-        "Categoría 2": ["Procesos", "Razonamiento", "Cálculo", "Datos", "Storytelling", "Programación"],
-        "Categoría 3": ["Esposo", "Padre", "Hijo", "Músico"],
-        "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
-    }
-    df_categorias = pd.DataFrame.from_dict(example_data, orient='index').transpose()
+# # Sidebar
+# st.sidebar.title("Datos de Entrada")
+# # Función para cargar imagen y convertirla en base64
+# def get_image_base64(image):
+#     if isinstance(image, str):  # Si la imagen es una ruta
+#         with open(image, "rb") as image_file:
+#             return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
+#     elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
+#         buffered = io.BytesIO()
+#         image = image.resize((150, 150))  # Ajustar tamaño de la imagen a 150x150 píxeles
+#         image.save(buffered, format="PNG")  # Convertir imagen a bytes
+#         return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
+#     return None
     
-    # Data editor en el sidebar
-    df_categorias = st.sidebar.data_editor(df_categorias, num_rows="dynamic", key="df_quienque")
+# # Función para crear el gráfico Quién/Qué con varias capas de atributos
+# def crear_grafico_quien_que(nombre, categorias, imagen):
+#     # Crear un network graph
+#     G = nx.Graph()
 
-    # Convertir el DataFrame a un diccionario de listas para categorías
-    categorias = {col: df_categorias[col].dropna().tolist() for col in df_categorias.columns}
+#     # Agregar nodo principal (la persona o entidad)
+#     G.add_node(nombre, type='central', shape='circularImage', image=get_image_base64(imagen) if imagen else None)
 
-    # Mostrar el gráfico solo si se ha ingresado un nombre
-    if nombre:
-        crear_grafico_quien_que(nombre, categorias, imagen)
+#     # Agregar nodos para las categorías y atributos
+#     for categoria, atributos in categorias.items():
+#         for atributo in atributos:
+#             G.add_node(atributo, type=categoria)
+#             G.add_edge(nombre, atributo)  # Conectar atributo con el nodo central
+
+#             # Conectar atributos entre sí si están en la misma categoría
+#             for otro_atributo in atributos:
+#                 if atributo != otro_atributo:
+#                     G.add_edge(atributo, otro_atributo)
+
+#     # Crear visualización con pyvis
+#     person_net = Network(
+#         height='600px',
+#         width='100%',
+#         bgcolor='#222222',
+#         font_color='white'
+#     )
+
+#     # Definir colores para las categorías
+#     categoria_colores = {
+#         'Categoría 1': '#1f77b4',  # Azul oscuro
+#         'Categoría 2': '#2ca02c',  # Verde oscuro
+#         'Categoría 3': '#9467bd',  # Púrpura oscuro
+#         'Categoría 4': '#bcbd22',  # Amarillo oliva oscuro
+#     }
+
+#     # Configurar los nodos con imágenes, colores y tamaños
+#     for node in G.nodes(data=True):
+#         node_categoria = node[1].get('type', 'central')
+#         color = categoria_colores.get(node_categoria, 'gray')  # Color por defecto si no se encuentra la categoría
+
+#         # Determinar si el nodo es el central o uno de los otros
+#         if node_categoria == 'central':
+#             node_options = {
+#                 "label": node[0],
+#                 "shape": "circularImage" if node[1].get('image', '') else "circle",
+#                 "image": node[1].get('image', ''),  # Convertir a base64 si es una imagen
+#                 "color": color,
+#                 "size": 80,  # Tamaño más grande para el nodo central
+#                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
+#             }
+#         else:
+#             node_options = {
+#                 "label": node[0],
+#                 "shape": "circle",
+#                 "color": color,
+#                 "size": 10,  # Tamaño más pequeño para los nodos secundarios
+#                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
+#             }
+#         person_net.add_node(node[0], **node_options)
+
+#     # Agregar edges
+#     for edge in G.edges():
+#         person_net.add_edge(edge[0], edge[1])
+
+#     # Configurar layout del grafo
+#     person_net.repulsion(
+#         node_distance=200,
+#         central_gravity=0.33,
+#         spring_length=100,
+#         spring_strength=0.10,
+#         damping=0.95
+#     )
+
+#     # Guardar y mostrar grafo en HTML
+#     path = '/tmp'
+#     person_net.save_graph(f'{path}/pyvis_graph.html')
+    
+#     with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
+#         graph_html = HtmlFile.read()
+
+#     # Mostrar grafo en la app con Streamlit Components
+#     components.html(graph_html, height=600)
+
+# # Pestaña: Quién/Qué
+# with tabs[1]:
+#     st.header("¿Quién/Qué?")
+#     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
+
+#     # Entrada de texto para el nombre
+#     nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
+
+#     # Imagen predeterminada si no se carga ninguna
+#     imagen_predeterminada = "perfil.jpg"
+
+#     # Cargar una imagen
+#     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
+#     imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
+
+#     # Ingreso de categorías y atributos
+#     st.sidebar.write("Ingrese las diferentes categorías y atributos:")
+
+#     # Crear DataFrame editable para las categorías
+#     example_data = {
+#         "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
+#         "Categoría 2": ["Procesos", "Razonamiento", "Cálculo", "Datos", "Storytelling", "Programación"],
+#         "Categoría 3": ["Esposo", "Padre", "Hijo", "Músico"],
+#         "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
+#     }
+#     df_categorias = pd.DataFrame.from_dict(example_data, orient='index').transpose()
+    
+#     # Data editor en el sidebar
+#     df_categorias = st.sidebar.data_editor(df_categorias, num_rows="dynamic", key="df_quienque")
+
+#     # Convertir el DataFrame a un diccionario de listas para categorías
+#     categorias = {col: df_categorias[col].dropna().tolist() for col in df_categorias.columns}
+
+#     # Mostrar el gráfico solo si se ha ingresado un nombre
+#     if nombre:
+#         crear_grafico_quien_que(nombre, categorias, imagen)
 
 # Función para crear gráfico de Pareto
 def crear_grafico_pareto(datos):
