@@ -423,8 +423,9 @@ with tabs[4]:
 # Pestaña: Cómo (modificada con el diagrama de flujo con simbología ANSI)
 with tabs[5]:
     st.header("¿Cómo?")
-    
-    st.sidebar.header('Datos del diagrama de flujo')
+    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
+    st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")       
+    st.sidebar.subheader('Datos del diagrama de flujo')
 
     # Función para generar el diagrama de flujo con colores llamativos, texto blanco y proporciones ajustadas
     def generate_flowchart(steps):
