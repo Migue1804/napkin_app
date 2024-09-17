@@ -609,7 +609,7 @@ with tabs[7]:
     
     st.subheader("Resumen profesional")
     st.write("""
-    Con 20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en modelos de mejora continua, excelencia operacional y proyectos de tecnología e infraestructura. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
+    20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en modelos de mejora continua, excelencia operacional y proyectos de tecnología e infraestructura. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
     """)
     
     st.subheader("Experiencia Profesional")
