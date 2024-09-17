@@ -248,20 +248,43 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
     })
 
     # Crear el mapa con los dos puntos
-    fig = px.scatter_mapbox(
-        df, lat="Latitud", lon="Longitud", zoom=5, height=600, text="Lugar"
-    )
+    fig = go.Figure()
+
+    # Añadir los puntos de origen y destino
+    fig.add_trace(go.Scattermapbox(
+        lat=df["Latitud"],
+        lon=df["Longitud"],
+        mode="markers+text",
+        text=df["Lugar"],
+        textposition="top right",
+        marker=dict(size=10, color="red"),
+        name="Lugares"
+    ))
 
     # Añadir la línea que conecta los dos puntos
-    fig.add_scattermapbox(
+    fig.add_trace(go.Scattermapbox(
         lat=[coordenadas_origen[0], coordenadas_destino[0]],  # Latitudes de origen y destino
         lon=[coordenadas_origen[1], coordenadas_destino[1]],  # Longitudes de origen y destino
-        mode="lines",
-        line=dict(width=2, color="blue"),
+        mode="lines+markers",
+        line=dict(width=4, color="blue", dash='solid'),
+        marker=dict(size=8, color="blue"),
         name="Línea de conexión"
-    )
+    ))
 
-    fig.update_layout(mapbox_style="open-street-map")
+    # Añadir una flecha entre el origen y el destino
+    fig.add_trace(go.Scattermapbox(
+        lat=[coordenadas_origen[0], coordenadas_destino[0]],
+        lon=[coordenadas_origen[1], coordenadas_destino[1]],
+        mode="markers+text",
+        marker=dict(size=10, symbol="arrow-bar-up", angleref="previous", color="blue"),
+        line=dict(width=4, color="blue"),
+        name="Flecha"
+    ))
+
+    fig.update_layout(
+        mapbox_style="open-street-map",
+        showlegend=False  # Ocultar la leyenda
+    )
 
     # Mostrar el gráfico en la aplicación
     st.plotly_chart(fig)
@@ -272,8 +295,7 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
 # Pestaña: Dónde (modificada)
 with tabs[2]:
     st.header("¿Dónde?")
-    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
-    st.sidebar.subheader("Ingresos de datos del ¿Dónde?:")    
+    st.sidebar.subheader("Ingresos de datos del ¿Dónde?:")
     # Ingreso de las ubicaciones de origen y destino
     origen = st.sidebar.text_input("Ingrese el lugar de origen:", "Valencia, Venezuela")
     destino = st.sidebar.text_input("Ingrese el lugar de destino:", "Medellín, Colombia")
@@ -287,7 +309,7 @@ with tabs[2]:
             crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_destino)
         except Exception as e:
             st.error(f"Error al obtener las coordenadas: {e}")
-
+            
 # Función para crear gráfico de Gantt usando Plotly Timeline
 def crear_grafico_gantt(eventos):
     fig = px.timeline(
