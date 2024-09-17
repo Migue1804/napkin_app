@@ -419,134 +419,250 @@ with tabs[4]:
         # Crear gráfico Gantt a partir del DataFrame ingresado
         crear_grafico_gantt(df_tareas)
 
-# Pestaña: Cómo (modificada para diagrama de flujo con nodos de inicio y fin)
+# Pestaña: Cómo (modificada con el diagrama de flujo con simbología ANSI)
 with tabs[5]:
     st.header("¿Cómo?")
     
-    # Ingreso de datos de las actividades en el sidebar
-    st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")
-    
-    # Ejemplo de datos de actividades y tipos
-    example_data = {
-        "Actividad": ["Paso 1", "Paso 2", "Paso 3","Paso 4","Paso 5","Paso 6","Paso 7","Paso 8"],
-        "Tipo": ["Almacenamiento","Set-up","Operación","Inspección", "Espera","Transporte","Almacenamiento","Transporte"],
-        "Simultáneo con": ["", "Paso 1", "","Paso 3","","","",""]
-    }
-    df_actividades = pd.DataFrame(example_data)
+    st.sidebar.header('Datos del diagrama de flujo')
 
-    # Ingreso de actividades, tipo y si ocurre simultáneamente
-    st.sidebar.write("Ingrese las actividades, tipo y si ocurre simultáneamente:")
-    df_actividades = st.sidebar.data_editor(df_actividades, num_rows="dynamic", key="df_como")
+    # Función para generar el diagrama de flujo con colores llamativos, texto blanco y proporciones ajustadas
+    def generate_flowchart(steps):
+        dot = graphviz.Digraph()
 
-    # Mapeo de tipos de actividad a URLs de imágenes (PNG)
-    tipo_imagen = {
-        "Set-up": "https://img.icons8.com/fluency/48/000000/maintenance.png",
-        "Operación": "https://img.icons8.com/fluency/48/000000/settings.png",
-        "Transporte": "https://img.icons8.com/fluency/48/000000/truck.png",
-        "Inspección": "https://img.icons8.com/fluency/48/000000/inspection.png",
-        "Almacenamiento": "https://img.icons8.com/fluency/48/000000/warehouse.png",
-        "Espera": "https://img.icons8.com/fluency/48/000000/hourglass.png"
-    }
+        # Colores por tipo de actividad, más llamativos
+        color_map = {
+            "Inicio / Fin": "#32CD32",  # LimeGreen
+            "Operación / Actividad": "#FFD700",  # Gold
+            "Documento": "#1E90FF",  # DodgerBlue
+            "Datos": "#FF6347",  # Tomato
+            "Almacenamiento / Archivo": "#8A2BE2",  # BlueViolet
+            "Decisión": "#FF4500"  # OrangeRed
+        }
 
-    # Crear gráfico de Network si hay actividades
-    if not df_actividades.empty:
-        # Crear un gráfico de Network dirigido
-        G = nx.DiGraph()
+        # Agregar nodos de inicio y fin fijos con colores llamativos y texto blanco
+        dot.node("Inicio", label="Inicio", shape="oval", style="filled", fillcolor=color_map["Inicio / Fin"], fontcolor="white")
+        dot.node("Fin", label="Fin", shape="oval", style="filled", fillcolor=color_map["Inicio / Fin"], fontcolor="white")
 
-        # Agregar nodo de inicio (verde) con imagen
-        G.add_node(
-            "Inicio",
-            label="Inicio",
-            color="green",
-            image="https://img.icons8.com/fluency/48/000000/play-circle.png"
-        )
+        # Agregar los pasos del diagrama de flujo
+        for step in steps:
+            fillcolor = color_map.get(step['tipo'], 'white')
+            dot.node(step['id'], label=step['etiqueta'], shape=step['forma'], style="filled", fillcolor=fillcolor, fontcolor="white")
 
-        # Agregar nodos para las actividades con imágenes
-        for idx, row in df_actividades.iterrows():
-            actividad = row["Actividad"]
-            tipo = row["Tipo"]
-            imagen = tipo_imagen.get(
-                tipo,
-                "https://img.icons8.com/fluency/48/000000/circle.png"  # Imagen por defecto
-            )
-            G.add_node(
-                actividad,
-                label=actividad,
-                image=imagen,
-                color="lightblue"  # Color predeterminado para actividades
-            )
+        # Conectar los pasos
+        dot.edge("Inicio", steps[0]['id'])  # Conexión desde el inicio al primer paso
+        for step in steps:
+            if 'siguiente' in step:
+                for next_step_id in step['siguiente']:
+                    dot.edge(step['id'], next_step_id)
+        dot.edge(steps[-1]['id'], "Fin")  # Conexión del último paso al fin
 
-        # Agregar nodo de fin (rojo) con imagen
-        G.add_node(
-            "Fin",
-            label="Fin",
-            color="red",
-            image="https://img.icons8.com/fluency/48/000000/stop-circle.png"
-        )
+        # Ajustar proporciones de ancho y alto (más alto que ancho)
+        dot.attr(size="6,8", ratio="fill")
 
-        # Agregar edges entre actividades consecutivas o simultáneas
-        for idx, row in df_actividades.iterrows():
-            actividad_actual = row["Actividad"]
-            if idx == 0:
-                # Conectar nodo de inicio al primer paso
-                G.add_edge("Inicio", actividad_actual)
+        return dot
 
-            if idx < len(df_actividades) - 1:
-                actividad_siguiente = df_actividades.iloc[idx + 1]["Actividad"]
-                G.add_edge(actividad_actual, actividad_siguiente)
-            else:
-                # Conectar el último nodo al nodo de fin
-                G.add_edge(actividad_actual, "Fin")
+    # Ejemplo precargado utilizando todos los símbolos y colores llamativos
+    def cargar_proceso_ejemplo():
+        return [
+            {'id': 'Paso_1', 'etiqueta': 'Iniciar proceso', 'tipo': 'Operación / Actividad', 'forma': 'rectangle', 'siguiente': ['Paso_2']},
+            {'id': 'Paso_2', 'etiqueta': 'Recibir documento', 'tipo': 'Documento', 'forma': 'parallelogram', 'siguiente': ['Paso_3']},
+            {'id': 'Paso_3', 'etiqueta': 'Tomar decisión', 'tipo': 'Decisión', 'forma': 'diamond', 'siguiente': ['Paso_4', 'Paso_5']},
+            {'id': 'Paso_4', 'etiqueta': 'Almacenar documento', 'tipo': 'Almacenamiento / Archivo', 'forma': 'invtriangle', 'siguiente': ['Paso_6']},
+            {'id': 'Paso_5', 'etiqueta': 'Procesar datos', 'tipo': 'Datos', 'forma': 'parallelogram', 'siguiente': ['Paso_6']},
+            {'id': 'Paso_6', 'etiqueta': 'Finalizar proceso', 'tipo': 'Operación / Actividad', 'forma': 'rectangle', 'siguiente': []},
+        ]
 
-            # Agregar conexión si es simultáneo con otra actividad
-            if row["Simultáneo con"]:
-                G.add_edge(actividad_actual, row["Simultáneo con"])
+    # Cargar o editar un proceso de ejemplo por defecto
+    usar_ejemplo = st.sidebar.checkbox('Usar proceso de ejemplo', value=True)
 
-        # Crear visualización con PyVis
-        flow_net = Network(
-            height='600px',
-            width='100%',
-            bgcolor='#222222',
-            font_color='white',
-            directed=True
-        )
+    if usar_ejemplo:
+        pasos = cargar_proceso_ejemplo()
+    else:
+        pasos = []
 
-        # Agregar nodos y edges al gráfico
-        for node in G.nodes(data=True):
-            node_options = {
-                "label": node[1]['label'],
-                "shape": "circularImage",
-                "image": node[1].get('image', ''),
-                "color": node[1].get('color', 'lightblue')
+    # Seleccionar número de pasos (si no se usa el proceso de ejemplo)
+    num_pasos = st.sidebar.number_input('Número de pasos', min_value=1, max_value=20, value=len(pasos) if usar_ejemplo else 1)
+
+    # IDs automáticos para los pasos
+    ids_disponibles = [f'Paso_{i + 1}' for i in range(num_pasos)]
+
+    for i in range(num_pasos):
+        st.sidebar.subheader(f'Paso {i + 1}')
+
+        # Datos para los pasos existentes o nuevos
+        if i < len(pasos):
+            paso = pasos[i]
+            etiqueta = st.sidebar.text_input(f'Etiqueta para el Paso {i + 1}', value=paso['etiqueta'])
+            tipo = st.sidebar.selectbox(f'Tipo de actividad del Paso {i + 1}', 
+                                        ['Inicio / Fin', 'Operación / Actividad', 'Documento', 'Datos', 'Almacenamiento / Archivo', 'Decisión'], 
+                                        index=['Inicio / Fin', 'Operación / Actividad', 'Documento', 'Datos', 'Almacenamiento / Archivo', 'Decisión'].index(paso['tipo']))
+            siguientes_pasos = st.sidebar.multiselect(f'Pasos siguientes desde el Paso {i + 1}', ids_disponibles, default=paso['siguiente'])
+        else:
+            etiqueta = st.sidebar.text_input(f'Etiqueta para el Paso {i + 1}', value=f'Paso {i + 1}')
+            tipo = st.sidebar.selectbox(f'Tipo de actividad del Paso {i + 1}', ['Inicio / Fin', 'Operación / Actividad', 'Documento', 'Datos', 'Almacenamiento / Archivo', 'Decisión'])
+            siguientes_pasos = st.sidebar.multiselect(f'Pasos siguientes desde el Paso {i + 1}', ids_disponibles)
+
+        # Definir la forma según el tipo de actividad
+        forma_map = {
+            'Inicio / Fin': 'oval',
+            'Operación / Actividad': 'rectangle',
+            'Documento': 'parallelogram',
+            'Datos': 'parallelogram',
+            'Almacenamiento / Archivo': 'invtriangle',
+            'Decisión': 'diamond'
+        }
+        forma = forma_map.get(tipo, 'rectangle')
+
+        # Actualizar o agregar el paso
+        if i < len(pasos):
+            pasos[i] = {
+                'id': f'Paso_{i + 1}',
+                'etiqueta': etiqueta,
+                'tipo': tipo,
+                'forma': forma,
+                'siguiente': siguientes_pasos
             }
-            flow_net.add_node(node[0], **node_options)
+        else:
+            pasos.append({
+                'id': f'Paso_{i + 1}',
+                'etiqueta': etiqueta,
+                'tipo': tipo,
+                'forma': forma,
+                'siguiente': siguientes_pasos
+            })
 
-        for edge in G.edges():
-            flow_net.add_edge(edge[0], edge[1])
+    # Mostrar el diagrama de flujo generado
+    st.graphviz_chart(generate_flowchart(pasos))
 
-        # Configurar el layout del gráfico
-        flow_net.repulsion(
-            node_distance=200,
-            central_gravity=0.33,
-            spring_length=100,
-            spring_strength=0.10,
-            damping=0.95
-        )
 
-        # Guardar y mostrar el gráfico en HTML
-        path = '/tmp'
-        flow_net.save_graph(f'{path}/pyvis_flow_diagram.html')
-        HtmlFile = open(f'{path}/pyvis_flow_diagram.html', 'r', encoding='utf-8')
-        components.html(HtmlFile.read(), height=600, width=800)
+# # Pestaña: Cómo (modificada para diagrama de flujo con nodos de inicio y fin)
+# with tabs[5]:
+#     st.header("¿Cómo?")
+    
+#     # Ingreso de datos de las actividades en el sidebar
+#     st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")
+    
+#     # Ejemplo de datos de actividades y tipos
+#     example_data = {
+#         "Actividad": ["Paso 1", "Paso 2", "Paso 3","Paso 4","Paso 5","Paso 6","Paso 7","Paso 8"],
+#         "Tipo": ["Almacenamiento","Set-up","Operación","Inspección", "Espera","Transporte","Almacenamiento","Transporte"],
+#         "Simultáneo con": ["", "Paso 1", "","Paso 3","","","",""]
+#     }
+#     df_actividades = pd.DataFrame(example_data)
 
-    # Leyenda ajustada para que coincida con las imágenes
-    st.markdown("### Tipos de Actividad:")
-    st.markdown('- **Set-up:** <img src="https://img.icons8.com/fluency/48/000000/maintenance.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Operación:** <img src="https://img.icons8.com/fluency/48/000000/settings.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Transporte:** <img src="https://img.icons8.com/fluency/48/000000/truck.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Inspección:** <img src="https://img.icons8.com/fluency/48/000000/inspection.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Almacenamiento:** <img src="https://img.icons8.com/fluency/48/000000/warehouse.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Espera:** <img src="https://img.icons8.com/fluency/48/000000/hourglass.png" width="30"/>', unsafe_allow_html=True)
+#     # Ingreso de actividades, tipo y si ocurre simultáneamente
+#     st.sidebar.write("Ingrese las actividades, tipo y si ocurre simultáneamente:")
+#     df_actividades = st.sidebar.data_editor(df_actividades, num_rows="dynamic", key="df_como")
+
+#     # Mapeo de tipos de actividad a URLs de imágenes (PNG)
+#     tipo_imagen = {
+#         "Set-up": "https://img.icons8.com/fluency/48/000000/maintenance.png",
+#         "Operación": "https://img.icons8.com/fluency/48/000000/settings.png",
+#         "Transporte": "https://img.icons8.com/fluency/48/000000/truck.png",
+#         "Inspección": "https://img.icons8.com/fluency/48/000000/inspection.png",
+#         "Almacenamiento": "https://img.icons8.com/fluency/48/000000/warehouse.png",
+#         "Espera": "https://img.icons8.com/fluency/48/000000/hourglass.png"
+#     }
+
+#     # Crear gráfico de Network si hay actividades
+#     if not df_actividades.empty:
+#         # Crear un gráfico de Network dirigido
+#         G = nx.DiGraph()
+
+#         # Agregar nodo de inicio (verde) con imagen
+#         G.add_node(
+#             "Inicio",
+#             label="Inicio",
+#             color="green",
+#             image="https://img.icons8.com/fluency/48/000000/play-circle.png"
+#         )
+
+#         # Agregar nodos para las actividades con imágenes
+#         for idx, row in df_actividades.iterrows():
+#             actividad = row["Actividad"]
+#             tipo = row["Tipo"]
+#             imagen = tipo_imagen.get(
+#                 tipo,
+#                 "https://img.icons8.com/fluency/48/000000/circle.png"  # Imagen por defecto
+#             )
+#             G.add_node(
+#                 actividad,
+#                 label=actividad,
+#                 image=imagen,
+#                 color="lightblue"  # Color predeterminado para actividades
+#             )
+
+#         # Agregar nodo de fin (rojo) con imagen
+#         G.add_node(
+#             "Fin",
+#             label="Fin",
+#             color="red",
+#             image="https://img.icons8.com/fluency/48/000000/stop-circle.png"
+#         )
+
+#         # Agregar edges entre actividades consecutivas o simultáneas
+#         for idx, row in df_actividades.iterrows():
+#             actividad_actual = row["Actividad"]
+#             if idx == 0:
+#                 # Conectar nodo de inicio al primer paso
+#                 G.add_edge("Inicio", actividad_actual)
+
+#             if idx < len(df_actividades) - 1:
+#                 actividad_siguiente = df_actividades.iloc[idx + 1]["Actividad"]
+#                 G.add_edge(actividad_actual, actividad_siguiente)
+#             else:
+#                 # Conectar el último nodo al nodo de fin
+#                 G.add_edge(actividad_actual, "Fin")
+
+#             # Agregar conexión si es simultáneo con otra actividad
+#             if row["Simultáneo con"]:
+#                 G.add_edge(actividad_actual, row["Simultáneo con"])
+
+#         # Crear visualización con PyVis
+#         flow_net = Network(
+#             height='600px',
+#             width='100%',
+#             bgcolor='#222222',
+#             font_color='white',
+#             directed=True
+#         )
+
+#         # Agregar nodos y edges al gráfico
+#         for node in G.nodes(data=True):
+#             node_options = {
+#                 "label": node[1]['label'],
+#                 "shape": "circularImage",
+#                 "image": node[1].get('image', ''),
+#                 "color": node[1].get('color', 'lightblue')
+#             }
+#             flow_net.add_node(node[0], **node_options)
+
+#         for edge in G.edges():
+#             flow_net.add_edge(edge[0], edge[1])
+
+#         # Configurar el layout del gráfico
+#         flow_net.repulsion(
+#             node_distance=200,
+#             central_gravity=0.33,
+#             spring_length=100,
+#             spring_strength=0.10,
+#             damping=0.95
+#         )
+
+#         # Guardar y mostrar el gráfico en HTML
+#         path = '/tmp'
+#         flow_net.save_graph(f'{path}/pyvis_flow_diagram.html')
+#         HtmlFile = open(f'{path}/pyvis_flow_diagram.html', 'r', encoding='utf-8')
+#         components.html(HtmlFile.read(), height=600, width=800)
+
+#     # Leyenda ajustada para que coincida con las imágenes
+#     st.markdown("### Tipos de Actividad:")
+#     st.markdown('- **Set-up:** <img src="https://img.icons8.com/fluency/48/000000/maintenance.png" width="30"/>', unsafe_allow_html=True)
+#     st.markdown('- **Operación:** <img src="https://img.icons8.com/fluency/48/000000/settings.png" width="30"/>', unsafe_allow_html=True)
+#     st.markdown('- **Transporte:** <img src="https://img.icons8.com/fluency/48/000000/truck.png" width="30"/>', unsafe_allow_html=True)
+#     st.markdown('- **Inspección:** <img src="https://img.icons8.com/fluency/48/000000/inspection.png" width="30"/>', unsafe_allow_html=True)
+#     st.markdown('- **Almacenamiento:** <img src="https://img.icons8.com/fluency/48/000000/warehouse.png" width="30"/>', unsafe_allow_html=True)
+#     st.markdown('- **Espera:** <img src="https://img.icons8.com/fluency/48/000000/hourglass.png" width="30"/>', unsafe_allow_html=True)
 
 # Pestaña: Por qué
 with tabs[6]:
