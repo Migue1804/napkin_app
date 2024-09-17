@@ -112,6 +112,21 @@ with tabs[0]:
     # Reproducir el archivo de audio
     st.audio(audio_file, format="audio/mp3")
 
+# Sidebar
+st.sidebar.title("Datos de Entrada")
+# Función para cargar imagen y convertirla en base64
+def get_image_base64(image):
+    if isinstance(image, str):  # Si la imagen es una ruta
+        with open(image, "rb") as image_file:
+            return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
+    elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
+        buffered = io.BytesIO()
+        image = image.resize((150, 150))  # Ajustar tamaño de la imagen a 150x150 píxeles
+        image.save(buffered, format="PNG")  # Convertir imagen a bytes
+        return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return None
+    
+
 def crear_grafico_quien_que(nombre, categorias, imagen):
     # Crear un network graph
     G = nx.Graph()
@@ -211,20 +226,6 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     # Mostrar grafo en la app con Streamlit Components
     components.html(graph_html, height=600)
 
-# # Sidebar
-# st.sidebar.title("Datos de Entrada")
-# # Función para cargar imagen y convertirla en base64
-# def get_image_base64(image):
-#     if isinstance(image, str):  # Si la imagen es una ruta
-#         with open(image, "rb") as image_file:
-#             return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
-#     elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
-#         buffered = io.BytesIO()
-#         image = image.resize((150, 150))  # Ajustar tamaño de la imagen a 150x150 píxeles
-#         image.save(buffered, format="PNG")  # Convertir imagen a bytes
-#         return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
-#     return None
-    
 # # Función para crear el gráfico Quién/Qué con varias capas de atributos
 # def crear_grafico_quien_que(nombre, categorias, imagen):
 #     # Crear un network graph
