@@ -265,19 +265,18 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
     fig.add_trace(go.Scattermapbox(
         lat=[coordenadas_origen[0], coordenadas_destino[0]],  # Latitudes de origen y destino
         lon=[coordenadas_origen[1], coordenadas_destino[1]],  # Longitudes de origen y destino
-        mode="lines+markers",
-        line=dict(width=4, color="blue", dash='solid'),
-        marker=dict(size=8, color="blue"),
+        mode="lines",
+        line=dict(width=4, color="blue"),  # Ancho de línea aumentado a 4
         name="Línea de conexión"
     ))
 
-    # Añadir una flecha entre el origen y el destino
+    # Añadir una flecha entre el origen y el destino (en realidad, no hay un símbolo de flecha en Scattermapbox, 
+    # pero se puede simular con el tamaño del marcador y la línea)
     fig.add_trace(go.Scattermapbox(
         lat=[coordenadas_origen[0], coordenadas_destino[0]],
         lon=[coordenadas_origen[1], coordenadas_destino[1]],
-        mode="markers+text",
-        marker=dict(size=10, symbol="arrow-bar-up", angleref="previous", color="blue"),
-        line=dict(width=4, color="blue"),
+        mode="markers",
+        marker=dict(size=10, color="blue"),
         name="Flecha"
     ))
 
