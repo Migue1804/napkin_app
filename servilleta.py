@@ -20,7 +20,7 @@ st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 st.image('Napkin App.png', use_column_width=True)
 
 # Agregar una nueva pestaña para la reseña del libro
-tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué", "Reseña del Libro"])
+tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
 
 # Pestaña: Reseña del libro
 with tabs[6]:
@@ -83,14 +83,14 @@ with tabs[6]:
     st.text_area("Resumen del libro", resumen, height=400)
 
     # Explicación en audio precargada
-    st.subheader("Explicación en audio del libro")
+    #st.subheader("Explicación en audio del libro")
     
     # Ruta del archivo de audio precargado
-    audio_path = "ruta_al_archivo/audio.mp3"  # Cambia esta ruta al archivo correcto
-    audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
+    #audio_path = "ruta_al_archivo/audio.mp3"  # Cambia esta ruta al archivo correcto
+    #audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
 
     # Reproducir el archivo de audio
-    st.audio(audio_file, format="audio/mp3")
+    #st.audio(audio_file, format="audio/mp3")
 
     # Sección para explicar la elección de los gráficos
     st.subheader("Razones de la escogencia de los gráficos")
