@@ -308,42 +308,42 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
 #     # Mostrar grafo en la app con Streamlit Components
 #     components.html(graph_html, height=600)
 
-# # Pestaña: Quién/Qué
-# with tabs[1]:
-#     st.header("¿Quién/Qué?")
-#     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
+# Pestaña: Quién/Qué
+with tabs[1]:
+    st.header("¿Quién/Qué?")
+    st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
 
-#     # Entrada de texto para el nombre
-#     nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
+    # Entrada de texto para el nombre
+    nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
 
-#     # Imagen predeterminada si no se carga ninguna
-#     imagen_predeterminada = "perfil.jpg"
+    # Imagen predeterminada si no se carga ninguna
+    imagen_predeterminada = "perfil.jpg"
 
-#     # Cargar una imagen
-#     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
-#     imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
+    # Cargar una imagen
+    imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
+    imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
 
-#     # Ingreso de categorías y atributos
-#     st.sidebar.write("Ingrese las diferentes categorías y atributos:")
+    # Ingreso de categorías y atributos
+    st.sidebar.write("Ingrese las diferentes categorías y atributos:")
 
-#     # Crear DataFrame editable para las categorías
-#     example_data = {
-#         "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
-#         "Categoría 2": ["Procesos", "Razonamiento", "Cálculo", "Datos", "Storytelling", "Programación"],
-#         "Categoría 3": ["Esposo", "Padre", "Hijo", "Músico"],
-#         "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
-#     }
-#     df_categorias = pd.DataFrame.from_dict(example_data, orient='index').transpose()
+    # Crear DataFrame editable para las categorías
+    example_data = {
+        "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
+        "Categoría 2": ["Procesos", "Razonamiento", "Cálculo", "Datos", "Storytelling", "Programación"],
+        "Categoría 3": ["Esposo", "Padre", "Hijo", "Músico"],
+        "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
+    }
+    df_categorias = pd.DataFrame.from_dict(example_data, orient='index').transpose()
     
-#     # Data editor en el sidebar
-#     df_categorias = st.sidebar.data_editor(df_categorias, num_rows="dynamic", key="df_quienque")
+    # Data editor en el sidebar
+    df_categorias = st.sidebar.data_editor(df_categorias, num_rows="dynamic", key="df_quienque")
 
-#     # Convertir el DataFrame a un diccionario de listas para categorías
-#     categorias = {col: df_categorias[col].dropna().tolist() for col in df_categorias.columns}
+    # Convertir el DataFrame a un diccionario de listas para categorías
+    categorias = {col: df_categorias[col].dropna().tolist() for col in df_categorias.columns}
 
-#     # Mostrar el gráfico solo si se ha ingresado un nombre
-#     if nombre:
-#         crear_grafico_quien_que(nombre, categorias, imagen)
+    # Mostrar el gráfico solo si se ha ingresado un nombre
+    if nombre:
+        crear_grafico_quien_que(nombre, categorias, imagen)
 
 # Función para crear gráfico de Pareto
 def crear_grafico_pareto(datos):
