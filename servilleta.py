@@ -13,6 +13,7 @@ from geopy.distance import geodesic
 import streamlit.components.v1 as components
 import matplotlib.colors as mcolors
 import plotly.graph_objects as go
+import graphviz
 
 # Configuración de la aplicación
 st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
