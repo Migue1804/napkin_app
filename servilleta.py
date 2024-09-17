@@ -259,6 +259,8 @@ with tabs[1]:
     # Mostrar el gráfico solo si se ha ingresado un nombre
     if nombre:
         crear_grafico_quien_que(nombre, categorias, imagen)
+            # Agregar un enlace al final de la pestaña
+    st.markdown("Para más información consulta en: [Interactive network visualizations](https://pyvis.readthedocs.io/en/latest/)")
 
 # Función para crear gráfico de Pareto
 def crear_grafico_pareto(datos):
@@ -329,6 +331,7 @@ with tabs[2]:
     if not df_cuanto.empty:
         # Llamada a la función para crear el gráfico de Pareto
         crear_grafico_pareto(df_cuanto)
+    st.markdown("Para más información consulta en: [Pareto chart](https://asq.org/quality-resources/pareto)")
         
 # Función para obtener las coordenadas de un lugar utilizando OSMNX
 def obtener_coordenadas_lugar(lugar):
@@ -432,7 +435,8 @@ with tabs[4]:
 
         # Crear gráfico Gantt a partir del DataFrame ingresado
         crear_grafico_gantt(df_tareas)
-
+    st.markdown("Para más información consulta en: [Gantt chart](https://www.apm.org.uk/resources/find-a-resource/gantt-chart/)")
+    
 # Pestaña: Cómo (modificada con el diagrama de flujo con simbología ANSI)
 with tabs[5]:
     st.header("¿Cómo?")
@@ -549,6 +553,7 @@ with tabs[5]:
 
     # Mostrar el diagrama de flujo generado
     st.graphviz_chart(generate_flowchart(pasos))
+    st.markdown("Para más información consulta en: [Flowchart](https://asq.org/quality-resources/flowchart)")
 
 # Pestaña: Por qué
 with tabs[6]:
@@ -601,6 +606,8 @@ with tabs[6]:
             st.plotly_chart(fig)
         else:
             st.error("Algunas de las columnas ingresadas no existen en el DataFrame. Verifique los nombres.")
+
+    st.markdown("Para más información consulta en: [Bubble chart](https://plotly.com/python/bubble-charts/)")
 
 # Pestaña: Acerca de mí
 with tabs[7]:
