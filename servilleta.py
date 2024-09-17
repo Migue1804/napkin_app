@@ -82,7 +82,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
             node_options = {
                 "label": node[0],
                 "shape": "circularImage" if node[1].get('image', '') else "circle",
-                "image": node[1].get('image', ''),
+                "image": node[1].get('image', ''),  # Convertir a base64 si es una imagen
                 "color": color,
                 "size": 80,  # Tamaño más grande para el nodo central
                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
@@ -113,10 +113,12 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     # Guardar y mostrar grafo en HTML
     path = '/tmp'
     person_net.save_graph(f'{path}/pyvis_graph.html')
-    HtmlFile = open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8')
+    
+    with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
+        graph_html = HtmlFile.read()
 
-    # Mostrar grafo en la app
-    components.html(HtmlFile.read(), height=600)
+    # Mostrar grafo en la app con Streamlit Components
+    components.html(graph_html, height=600)
 
 # Pestaña: Quién/Qué
 with tabs[0]:
@@ -154,7 +156,7 @@ with tabs[0]:
     # Mostrar el gráfico solo si se ha ingresado un nombre
     if nombre:
         crear_grafico_quien_que(nombre, categorias, imagen)
-        
+
 # Función para crear gráfico de Pareto
 def crear_grafico_pareto(datos):
     # Ordenar los datos de mayor a menor
