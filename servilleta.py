@@ -82,7 +82,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
             node_options = {
                 "label": node[0],
                 "shape": "circularImage" if node[1].get('image', '') else "circle",
-                "image": node[1].get('image', ''),  # Convertir a base64 si es una imagen
+                "image": node[1].get('image', ''),
                 "color": color,
                 "size": 80,  # Tamaño más grande para el nodo central
                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
@@ -113,23 +113,10 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     # Guardar y mostrar grafo en HTML
     path = '/tmp'
     person_net.save_graph(f'{path}/pyvis_graph.html')
-    with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
-        graph_html = HtmlFile.read()
+    HtmlFile = open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8')
 
-    # Mostrar grafo en la app con estilo centrado
-    st.markdown("""
-        <style>
-            .centered-graph {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 600px;
-            }
-        </style>
-        <div class="centered-graph">
-            {}
-        </div>
-    """.format(graph_html), unsafe_allow_html=True)
+    # Mostrar grafo en la app
+    components.html(HtmlFile.read(), height=600)
 
 # Pestaña: Quién/Qué
 with tabs[0]:
