@@ -328,9 +328,16 @@ with tabs[3]:
         # Crear gráfico Gantt a partir del DataFrame ingresado
         crear_grafico_gantt(df_tareas)
 
+import streamlit as st
+import pandas as pd
+import networkx as nx
+from pyvis.network import Network
+import streamlit.components.v1 as components
+
 # Pestaña: Cómo (modificada para diagrama de flujo con nodos de inicio y fin)
 with tabs[4]:
     st.header("¿Cómo?")
+    
     # Ingreso de datos de las actividades en el sidebar
     st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")
     
@@ -445,17 +452,16 @@ with tabs[4]:
         path = '/tmp'
         flow_net.save_graph(f'{path}/pyvis_flow_diagram.html')
         HtmlFile = open(f'{path}/pyvis_flow_diagram.html', 'r', encoding='utf-8')
-        components.html(HtmlFile.read(), height=600)
+        components.html(HtmlFile.read(), height=600, width=800)
 
     # Leyenda ajustada para que coincida con las imágenes
     st.markdown("### Tipos de Actividad:")
     st.markdown('- **Set-up:** <img src="https://img.icons8.com/fluency/48/000000/maintenance.png" width="30"/>', unsafe_allow_html=True)
     st.markdown('- **Operación:** <img src="https://img.icons8.com/fluency/48/000000/settings.png" width="30"/>', unsafe_allow_html=True)
-    st.markdown('- **Transporte:** <img src="https://img.icons8.com/fluency/48/000000/delivery.png" width="30"/>', unsafe_allow_html=True)
+    st.markdown('- **Transporte:** <img src="https://img.icons8.com/fluency/48/000000/truck.png" width="30"/>', unsafe_allow_html=True)
     st.markdown('- **Inspección:** <img src="https://img.icons8.com/fluency/48/000000/inspection.png" width="30"/>', unsafe_allow_html=True)
     st.markdown('- **Almacenamiento:** <img src="https://img.icons8.com/fluency/48/000000/warehouse.png" width="30"/>', unsafe_allow_html=True)
     st.markdown('- **Espera:** <img src="https://img.icons8.com/fluency/48/000000/hourglass.png" width="30"/>', unsafe_allow_html=True)
-
 
 # Pestaña: Por qué
 with tabs[5]:
