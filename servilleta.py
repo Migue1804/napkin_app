@@ -424,8 +424,9 @@ with tabs[4]:
 with tabs[5]:
     st.header("¿Cómo?")
     # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
-    st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")       
-    st.sidebar.subheader('Datos del diagrama de flujo')
+    st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")  
+    # Ingreso de datos mediante un DataFrame editable
+    st.sidebar.write("Modifique los datos de acuerdo a su necesidad para el diagrama de flujo:")
 
     # Función para generar el diagrama de flujo con colores llamativos, texto blanco y proporciones ajustadas
     def generate_flowchart(steps):
