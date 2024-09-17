@@ -95,11 +95,11 @@ tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qu�
 def get_image_base64(image):
     if isinstance(image, str):  # Si la imagen es una ruta
         with open(image, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+            return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
     elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
         buffered = io.BytesIO()
         image.save(buffered, format="PNG")  # Convertir imagen a bytes
-        return base64.b64encode(buffered.getvalue()).decode("utf-8")
+        return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
     return None
 
 # Función para crear el gráfico Quién/Qué con varias capas de atributos
@@ -179,7 +179,7 @@ with tabs[0]:
     nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
 
     # Imagen predeterminada si no se carga ninguna
-    imagen_predeterminada = "perfil.jpg"
+    imagen_predeterminada = "ruta_a_tu_imagen_predeterminada.jpg"
 
     # Cargar una imagen
     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
