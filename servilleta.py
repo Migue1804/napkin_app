@@ -25,10 +25,7 @@ tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuán
 
 # Pestaña: Reseña del libro
 with tabs[0]:
-    #st.header("Reseña del Libro")
 
-    # Resumen del libro
-    #st.subheader("Resumen del libro")
     resumen = """
     ## Resumen del libro: "The Back of the Napkin de Dan Roam"
     
@@ -81,7 +78,7 @@ with tabs[0]:
     En resumen, "The Back of the Napkin" ofrece un enfoque práctico para utilizar el pensamiento visual como herramienta 
     para la resolución de problemas y la comunicación efectiva.
     """
-    #st.text_area("Resumen del libro", resumen, height=400)
+
     st.markdown(resumen)
     
     st.subheader("Razones de la escogencia de los gráficos")
@@ -225,90 +222,6 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
 
     # Mostrar grafo en la app con Streamlit Components con ancho responsivo
     components.html(graph_html, height=600, width=800)
-
-
-# # Función para crear el gráfico Quién/Qué con varias capas de atributos
-# def crear_grafico_quien_que(nombre, categorias, imagen):
-#     # Crear un network graph
-#     G = nx.Graph()
-
-#     # Agregar nodo principal (la persona o entidad)
-#     G.add_node(nombre, type='central', shape='circularImage', image=get_image_base64(imagen) if imagen else None)
-
-#     # Agregar nodos para las categorías y atributos
-#     for categoria, atributos in categorias.items():
-#         for atributo in atributos:
-#             G.add_node(atributo, type=categoria)
-#             G.add_edge(nombre, atributo)  # Conectar atributo con el nodo central
-
-#             # Conectar atributos entre sí si están en la misma categoría
-#             for otro_atributo in atributos:
-#                 if atributo != otro_atributo:
-#                     G.add_edge(atributo, otro_atributo)
-
-#     # Crear visualización con pyvis
-#     person_net = Network(
-#         height='600px',
-#         width='100%',
-#         bgcolor='#222222',
-#         font_color='white'
-#     )
-
-#     # Definir colores para las categorías
-#     categoria_colores = {
-#         'Categoría 1': '#1f77b4',  # Azul oscuro
-#         'Categoría 2': '#2ca02c',  # Verde oscuro
-#         'Categoría 3': '#9467bd',  # Púrpura oscuro
-#         'Categoría 4': '#bcbd22',  # Amarillo oliva oscuro
-#     }
-
-#     # Configurar los nodos con imágenes, colores y tamaños
-#     for node in G.nodes(data=True):
-#         node_categoria = node[1].get('type', 'central')
-#         color = categoria_colores.get(node_categoria, 'gray')  # Color por defecto si no se encuentra la categoría
-
-#         # Determinar si el nodo es el central o uno de los otros
-#         if node_categoria == 'central':
-#             node_options = {
-#                 "label": node[0],
-#                 "shape": "circularImage" if node[1].get('image', '') else "circle",
-#                 "image": node[1].get('image', ''),  # Convertir a base64 si es una imagen
-#                 "color": color,
-#                 "size": 80,  # Tamaño más grande para el nodo central
-#                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
-#             }
-#         else:
-#             node_options = {
-#                 "label": node[0],
-#                 "shape": "circle",
-#                 "color": color,
-#                 "size": 10,  # Tamaño más pequeño para los nodos secundarios
-#                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
-#             }
-#         person_net.add_node(node[0], **node_options)
-
-#     # Agregar edges
-#     for edge in G.edges():
-#         person_net.add_edge(edge[0], edge[1])
-
-#     # Configurar layout del grafo
-#     person_net.repulsion(
-#         node_distance=200,
-#         central_gravity=0.33,
-#         spring_length=100,
-#         spring_strength=0.10,
-#         damping=0.95
-#     )
-
-#     # Guardar y mostrar grafo en HTML
-#     path = '/tmp'
-#     person_net.save_graph(f'{path}/pyvis_graph.html')
-    
-#     with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
-#         graph_html = HtmlFile.read()
-
-#     # Mostrar grafo en la app con Streamlit Components
-#     components.html(graph_html, height=600)
 
 # Pestaña: Quién/Qué
 with tabs[1]:
@@ -637,136 +550,6 @@ with tabs[5]:
     # Mostrar el diagrama de flujo generado
     st.graphviz_chart(generate_flowchart(pasos))
 
-
-# # Pestaña: Cómo (modificada para diagrama de flujo con nodos de inicio y fin)
-# with tabs[5]:
-#     st.header("¿Cómo?")
-    
-#     # Ingreso de datos de las actividades en el sidebar
-#     st.sidebar.subheader("Ingresos de datos del ¿Cómo?:")
-    
-#     # Ejemplo de datos de actividades y tipos
-#     example_data = {
-#         "Actividad": ["Paso 1", "Paso 2", "Paso 3","Paso 4","Paso 5","Paso 6","Paso 7","Paso 8"],
-#         "Tipo": ["Almacenamiento","Set-up","Operación","Inspección", "Espera","Transporte","Almacenamiento","Transporte"],
-#         "Simultáneo con": ["", "Paso 1", "","Paso 3","","","",""]
-#     }
-#     df_actividades = pd.DataFrame(example_data)
-
-#     # Ingreso de actividades, tipo y si ocurre simultáneamente
-#     st.sidebar.write("Ingrese las actividades, tipo y si ocurre simultáneamente:")
-#     df_actividades = st.sidebar.data_editor(df_actividades, num_rows="dynamic", key="df_como")
-
-#     # Mapeo de tipos de actividad a URLs de imágenes (PNG)
-#     tipo_imagen = {
-#         "Set-up": "https://img.icons8.com/fluency/48/000000/maintenance.png",
-#         "Operación": "https://img.icons8.com/fluency/48/000000/settings.png",
-#         "Transporte": "https://img.icons8.com/fluency/48/000000/truck.png",
-#         "Inspección": "https://img.icons8.com/fluency/48/000000/inspection.png",
-#         "Almacenamiento": "https://img.icons8.com/fluency/48/000000/warehouse.png",
-#         "Espera": "https://img.icons8.com/fluency/48/000000/hourglass.png"
-#     }
-
-#     # Crear gráfico de Network si hay actividades
-#     if not df_actividades.empty:
-#         # Crear un gráfico de Network dirigido
-#         G = nx.DiGraph()
-
-#         # Agregar nodo de inicio (verde) con imagen
-#         G.add_node(
-#             "Inicio",
-#             label="Inicio",
-#             color="green",
-#             image="https://img.icons8.com/fluency/48/000000/play-circle.png"
-#         )
-
-#         # Agregar nodos para las actividades con imágenes
-#         for idx, row in df_actividades.iterrows():
-#             actividad = row["Actividad"]
-#             tipo = row["Tipo"]
-#             imagen = tipo_imagen.get(
-#                 tipo,
-#                 "https://img.icons8.com/fluency/48/000000/circle.png"  # Imagen por defecto
-#             )
-#             G.add_node(
-#                 actividad,
-#                 label=actividad,
-#                 image=imagen,
-#                 color="lightblue"  # Color predeterminado para actividades
-#             )
-
-#         # Agregar nodo de fin (rojo) con imagen
-#         G.add_node(
-#             "Fin",
-#             label="Fin",
-#             color="red",
-#             image="https://img.icons8.com/fluency/48/000000/stop-circle.png"
-#         )
-
-#         # Agregar edges entre actividades consecutivas o simultáneas
-#         for idx, row in df_actividades.iterrows():
-#             actividad_actual = row["Actividad"]
-#             if idx == 0:
-#                 # Conectar nodo de inicio al primer paso
-#                 G.add_edge("Inicio", actividad_actual)
-
-#             if idx < len(df_actividades) - 1:
-#                 actividad_siguiente = df_actividades.iloc[idx + 1]["Actividad"]
-#                 G.add_edge(actividad_actual, actividad_siguiente)
-#             else:
-#                 # Conectar el último nodo al nodo de fin
-#                 G.add_edge(actividad_actual, "Fin")
-
-#             # Agregar conexión si es simultáneo con otra actividad
-#             if row["Simultáneo con"]:
-#                 G.add_edge(actividad_actual, row["Simultáneo con"])
-
-#         # Crear visualización con PyVis
-#         flow_net = Network(
-#             height='600px',
-#             width='100%',
-#             bgcolor='#222222',
-#             font_color='white',
-#             directed=True
-#         )
-
-#         # Agregar nodos y edges al gráfico
-#         for node in G.nodes(data=True):
-#             node_options = {
-#                 "label": node[1]['label'],
-#                 "shape": "circularImage",
-#                 "image": node[1].get('image', ''),
-#                 "color": node[1].get('color', 'lightblue')
-#             }
-#             flow_net.add_node(node[0], **node_options)
-
-#         for edge in G.edges():
-#             flow_net.add_edge(edge[0], edge[1])
-
-#         # Configurar el layout del gráfico
-#         flow_net.repulsion(
-#             node_distance=200,
-#             central_gravity=0.33,
-#             spring_length=100,
-#             spring_strength=0.10,
-#             damping=0.95
-#         )
-
-#         # Guardar y mostrar el gráfico en HTML
-#         path = '/tmp'
-#         flow_net.save_graph(f'{path}/pyvis_flow_diagram.html')
-#         HtmlFile = open(f'{path}/pyvis_flow_diagram.html', 'r', encoding='utf-8')
-#         components.html(HtmlFile.read(), height=600, width=800)
-
-#     # Leyenda ajustada para que coincida con las imágenes
-#     st.markdown("### Tipos de Actividad:")
-#     st.markdown('- **Set-up:** <img src="https://img.icons8.com/fluency/48/000000/maintenance.png" width="30"/>', unsafe_allow_html=True)
-#     st.markdown('- **Operación:** <img src="https://img.icons8.com/fluency/48/000000/settings.png" width="30"/>', unsafe_allow_html=True)
-#     st.markdown('- **Transporte:** <img src="https://img.icons8.com/fluency/48/000000/truck.png" width="30"/>', unsafe_allow_html=True)
-#     st.markdown('- **Inspección:** <img src="https://img.icons8.com/fluency/48/000000/inspection.png" width="30"/>', unsafe_allow_html=True)
-#     st.markdown('- **Almacenamiento:** <img src="https://img.icons8.com/fluency/48/000000/warehouse.png" width="30"/>', unsafe_allow_html=True)
-#     st.markdown('- **Espera:** <img src="https://img.icons8.com/fluency/48/000000/hourglass.png" width="30"/>', unsafe_allow_html=True)
-
 # Pestaña: Por qué
 with tabs[6]:
     st.header("¿Por qué?")
@@ -869,3 +652,6 @@ with tabs[7]:
       - Control de Procesos Químicos
       - Auditoría de Sistemas Integrados de Gestión
     """)
+  
+    # Agregar un enlace al final de la pestaña
+    st.markdown("Para más información consulta en: [LinkedIn](https://www.linkedin.com/in/josemaguilar/)")
