@@ -19,12 +19,101 @@ st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 # Display the image above the title
 st.image('Napkin App.png', use_column_width=True)
 
+# Agregar una nueva pestaña para la reseña del libro
+tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué", "Reseña del Libro"])
+
+# Pestaña: Reseña del libro
+with tabs[6]:
+    st.header("Reseña del Libro")
+
+    # Resumen del libro
+    st.subheader("Resumen del libro")
+    resumen = """
+    ## Resumen de "The Back of the Napkin" por Dan Roam
+    
+    Este resumen se centra en el marco de 6 preguntas, el SQVID y las estrategias visuales recomendadas en el libro 
+    "The Back of the Napkin" de Dan Roam para resolver problemas y vender ideas.
+    
+    El libro argumenta que el pensamiento visual, utilizando dibujos sencillos, es una herramienta poderosa para la 
+    resolución de problemas y la comunicación efectiva. Roam explica que cualquier problema se puede aclarar con una 
+    imagen, y cualquier imagen se puede crear utilizando un conjunto simple de herramientas y reglas.
+    
+    ### El Marco de las 6 Preguntas (6W)
+    
+    Roam propone un marco de seis preguntas fundamentales, conocidas como las 6W, para analizar y abordar cualquier problema:  
+    
+    * **Quién/Qué (Who/What):** Define los actores y objetos involucrados.
+    * **Cuánto (How Much):**  Analiza las cantidades, medidas y datos.
+    * **Dónde (Where):**  Ubica el problema en un contexto espacial.
+    * **Cuándo (When):**  Establece un marco temporal para el problema.
+    * **Cómo (How):**  Describe los procesos y relaciones de causa y efecto.
+    * **Por qué (Why):**   Explora las razones, motivaciones y causas subyacentes. 
+    
+    Estas preguntas no solo ayudan a comprender el problema, sino que también guían la elección del gráfico o estrategia 
+    visual más efectiva para comunicarlo.
+    
+    ### El SQVID como Herramienta de Imaginación
+    
+    El SQVID es un acrónimo que representa cinco preguntas para activar la imaginación visual y explorar diferentes 
+    perspectivas de una idea:
+    
+    * **Simple vs. Elaborado:** ¿Se necesita una representación simple o detallada?
+    * **Cualitativo vs. Cuantitativo:** ¿Se enfatizan las características o los datos numéricos?
+    * **Visión vs. Ejecución:** ¿Se busca inspirar o mostrar los pasos concretos?
+    * **Individual vs. Comparación:** ¿Se presenta una sola idea o se compara con otras?
+    * **Cambio vs. Status Quo:** ¿Se propone una transformación o se describe la situación actual?
+    
+    Al responder estas preguntas, se pueden generar múltiples representaciones visuales de una idea y elegir la más 
+    efectiva para la audiencia y el objetivo.
+    
+    ### Gráficos y Estrategias Visuales Recomendadas
+    
+    El libro presenta seis marcos visuales principales, cada uno correspondiente a una de las 6W:
+    
+    * **Retrato:** Para mostrar **quién/qué** (ej. un organigrama, un diagrama de personajes).
+    * **Gráfico:** Para visualizar **cuánto** (ej. gráfico de barras, gráfico circular).
+    * **Mapa:** Para representar **dónde** (ej. mapa mental, diagrama de flujo de procesos).
+    * **Línea de Tiempo:** Para ilustrar **cuándo** (ej. cronograma, diagrama de Gantt).
+    * **Diagrama de Flujo:** Para explicar **cómo** (ej. diagrama de flujo de trabajo, algoritmo).
+    * **Gráfico de Múltiples Variables:** Para analizar **por qué** (ej. gráfico de dispersión, mapa de calor).
+    
+    En resumen, "The Back of the Napkin" ofrece un enfoque práctico para utilizar el pensamiento visual como herramienta 
+    para la resolución de problemas y la comunicación efectiva.
+    """
+    st.text_area("Resumen del libro", resumen, height=400)
+
+    # Explicación en audio precargada
+    st.subheader("Explicación en audio del libro")
+    
+    # Ruta del archivo de audio precargado
+    audio_path = "ruta_al_archivo/audio.mp3"  # Cambia esta ruta al archivo correcto
+    audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
+
+    # Reproducir el archivo de audio
+    st.audio(audio_file, format="audio/mp3")
+
+    # Sección para explicar la elección de los gráficos
+    st.subheader("Razones de la escogencia de los gráficos")
+    
+    # Ejemplo de razones
+    explicacion_graficos = """
+    Los gráficos utilizados en esta aplicación se alinean con el marco visual propuesto por Dan Roam en "The Back of the Napkin". 
+    
+    1. **Quién/Qué (Gráfico de Nodos):** Este gráfico permite mostrar las conexiones entre personas, estudios y habilidades, siguiendo la recomendación de usar retratos o gráficos de red para visualizar relaciones entre actores y objetos.
+    
+    2. **Cuánto (Gráfico de Pareto):** Este gráfico es ideal para visualizar cantidades y datos. En particular, resalta la importancia de unos pocos elementos clave sobre la mayoría, una estrategia visual efectiva para mostrar patrones cuantitativos.
+    
+    3. **Cómo (Diagrama de Flujo):** El uso de diagramas de flujo para mostrar procesos es una herramienta clara y directa para entender relaciones de causa y efecto.
+    
+    4. **Cuándo (Línea de Tiempo):** Para mostrar secuencias temporales, la línea de tiempo es el gráfico recomendado para organizar eventos de manera clara y ordenada.
+    
+    Cada uno de estos gráficos no solo sigue el marco de las 6W, sino que también se ajusta al modelo SQVID para ayudar a presentar la información de forma visualmente efectiva.
+    """
+    st.text_area("Describe las razones por las cuales escogiste estos gráficos", explicacion_graficos, height=200)
+
+
 # Sidebar
 st.sidebar.title("Datos de Entrada")
-
-# Tabs para cada tipo de problema
-tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
-
 # Función para cargar imagen y convertirla en base64
 def get_image_base64(image):
     if isinstance(image, str):  # Si la imagen es una ruta
