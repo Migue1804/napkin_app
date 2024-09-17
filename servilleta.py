@@ -18,7 +18,7 @@ import matplotlib.colors as mcolors
 # Configuración de la aplicación
 st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 # Display the image above the title
-st.image('Napkin App.PNG', use_column_width=True)
+st.image('Napkin App.png', use_column_width=True)
 
 # Función para obtener las coordenadas de un lugar utilizando OSMNX
 def obtener_coordenadas_lugar(lugar):
