@@ -224,7 +224,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
         graph_html = HtmlFile.read()
 
     # Mostrar grafo en la app con Streamlit Components con ancho responsivo
-    components.html(graph_html, height=600, width=600)
+    components.html(graph_html, height=600, width=800)
 
 
 # # Función para crear el gráfico Quién/Qué con varias capas de atributos
