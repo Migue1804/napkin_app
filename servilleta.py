@@ -71,18 +71,29 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
         'Categoría 4': 'lightgoldenrodyellow',
     }
 
-    # Configurar los nodos con imágenes, colores y tamaño fijo
+    # Configurar los nodos con imágenes, colores y tamaños
     for node in G.nodes(data=True):
         node_categoria = node[1].get('type', 'central')
         color = categoria_colores.get(node_categoria, 'gray')  # Color por defecto si no se encuentra la categoría
-        node_options = {
-            "label": node[0],
-            "shape": "circularImage" if node[1].get('image', '') else "circle",
-            "image": node[1].get('image', ''),
-            "color": color,
-            "size": 50,  # Tamaño fijo del nodo para todos
-            "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
-        }
+
+        # Determinar si el nodo es el central o uno de los otros
+        if node_categoria == 'central':
+            node_options = {
+                "label": node[0],
+                "shape": "circularImage" if node[1].get('image', '') else "circle",
+                "image": node[1].get('image', ''),
+                "color": color,
+                "size": 70,  # Tamaño más grande para el nodo central
+                "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
+            }
+        else:
+            node_options = {
+                "label": node[0],
+                "shape": "circle",
+                "color": color,
+                "size": 30,  # Tamaño más pequeño para los nodos secundarios
+                "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
+            }
         person_net.add_node(node[0], **node_options)
 
     # Agregar edges
