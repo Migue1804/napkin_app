@@ -24,10 +24,10 @@ tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuán
 
 # Pestaña: Reseña del libro
 with tabs[0]:
-    st.header("Reseña del Libro")
+    #st.header("Reseña del Libro")
 
     # Resumen del libro
-    st.subheader("Resumen del libro")
+    #st.subheader("Resumen del libro")
     resumen = """
     ## Resumen de "The Back of the Napkin" por Dan Roam
     
