@@ -29,7 +29,7 @@ with tabs[0]:
     # Resumen del libro
     #st.subheader("Resumen del libro")
     resumen = """
-    ## Resumen de "The Back of the Napkin" por Dan Roam
+    ## Resumen del libro: "The Back of the Napkin de Dan Roam"
     
     Este resumen se centra en el marco de 6 preguntas, el SQVID y las estrategias visuales recomendadas en el libro 
     "The Back of the Napkin" de Dan Roam para resolver problemas y vender ideas.
