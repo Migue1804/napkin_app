@@ -113,7 +113,8 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     # Guardar y mostrar grafo en HTML
     path = '/tmp'
     person_net.save_graph(f'{path}/pyvis_graph.html')
-    HtmlFile = open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8')
+    with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
+        graph_html = HtmlFile.read()
 
     # Mostrar grafo en la app con estilo centrado
     st.markdown("""
@@ -126,9 +127,9 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
             }
         </style>
         <div class="centered-graph">
-            <iframe srcdoc='{}' width='80%' height='100%' frameborder='0'></iframe>
+            {}
         </div>
-    """.format(HtmlFile.read()), unsafe_allow_html=True)
+    """.format(graph_html), unsafe_allow_html=True)
 
 # Pestaña: Quién/Qué
 with tabs[0]:
