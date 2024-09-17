@@ -13,77 +13,10 @@ from geopy.distance import geodesic
 import streamlit.components.v1 as components
 import matplotlib.colors as mcolors
 
-
-
 # Configuración de la aplicación
 st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 # Display the image above the title
 st.image('Napkin App.png', use_column_width=True)
-
-# Función para obtener las coordenadas de un lugar utilizando OSMNX
-def obtener_coordenadas_lugar(lugar):
-    return ox.geocode(lugar)
-
-# Función para calcular la distancia entre dos puntos (coordenadas)
-def calcular_distancia(origen, destino):
-    return geodesic(origen, destino).kilometers
-
-# Función para graficar las ubicaciones en un mapa y mostrar la distancia, conectando los puntos con una línea
-def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_destino):
-    # Calcular la distancia entre las dos ubicaciones
-    distancia = calcular_distancia(coordenadas_origen, coordenadas_destino)
-
-    # Crear un DataFrame para los dos puntos
-    df = pd.DataFrame({
-        "Lugar": [origen, destino],
-        "Latitud": [coordenadas_origen[0], coordenadas_destino[0]],
-        "Longitud": [coordenadas_origen[1], coordenadas_destino[1]]
-    })
-
-    # Crear el mapa con los dos puntos
-    fig = px.scatter_mapbox(
-        df, lat="Latitud", lon="Longitud", zoom=5, height=600, text="Lugar"
-    )
-
-    # Añadir la línea que conecta los dos puntos
-    fig.add_scattermapbox(
-        lat=[coordenadas_origen[0], coordenadas_destino[0]],  # Latitudes de origen y destino
-        lon=[coordenadas_origen[1], coordenadas_destino[1]],  # Longitudes de origen y destino
-        mode="lines",
-        line=dict(width=2, color="blue"),
-        name="Línea de conexión"
-    )
-
-    fig.update_layout(mapbox_style="open-street-map")
-
-    # Mostrar el gráfico en la aplicación
-    st.plotly_chart(fig)
-
-    # Mostrar la distancia entre los dos lugares
-    st.write(f"La distancia entre {origen} y {destino} es de aproximadamente {distancia:.2f} km.")
-
-# Función para crear gráfico de Gantt usando Plotly Timeline
-def crear_grafico_gantt(eventos):
-    fig = px.timeline(
-        eventos,
-        x_start="Fecha de Inicio", 
-        x_end="Fecha de Fin", 
-        y="Evento", 
-        color='Categoría',  # Esto es opcional si deseas agregar categorías para colorear las tareas
-        title='Gráfico de Gantt de Eventos'
-    )
-
-    fig.update_yaxes(autorange="reversed")  # Invertir el eje y para que las tareas se vean de arriba hacia abajo
-    fig.update_layout(height=600, width=900)  # Ajustar el tamaño del gráfico
-    st.plotly_chart(fig)
-
-
-def crear_grafico_porque(matriz):
-    fig, ax = plt.subplots()
-    cax = ax.matshow(matriz, cmap='coolwarm')
-    fig.colorbar(cax)
-    st.pyplot(fig)
-
 
 # Sidebar
 st.sidebar.title("Datos de Entrada")
@@ -98,6 +31,7 @@ def get_image_base64(image):
             return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
     elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
         buffered = io.BytesIO()
+        image = image.resize((150, 150))  # Ajustar tamaño de la imagen a 150x150 píxeles
         image.save(buffered, format="PNG")  # Convertir imagen a bytes
         return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
     return None
@@ -146,7 +80,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
             "shape": "circularImage" if node[1].get('image', '') else "circle",
             "image": node[1].get('image', ''),
             "color": color,
-            "size": 30,  # Tamaño fijo del nodo
+            "size": 50,  # Tamaño fijo del nodo para todos
             "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
         }
         person_net.add_node(node[0], **node_options)
@@ -279,6 +213,48 @@ with tabs[1]:
         # Llamada a la función para crear el gráfico de Pareto
         crear_grafico_pareto(df_cuanto)
 
+# Función para obtener las coordenadas de un lugar utilizando OSMNX
+def obtener_coordenadas_lugar(lugar):
+    return ox.geocode(lugar)
+
+# Función para calcular la distancia entre dos puntos (coordenadas)
+def calcular_distancia(origen, destino):
+    return geodesic(origen, destino).kilometers
+
+# Función para graficar las ubicaciones en un mapa y mostrar la distancia, conectando los puntos con una línea
+def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_destino):
+    # Calcular la distancia entre las dos ubicaciones
+    distancia = calcular_distancia(coordenadas_origen, coordenadas_destino)
+
+    # Crear un DataFrame para los dos puntos
+    df = pd.DataFrame({
+        "Lugar": [origen, destino],
+        "Latitud": [coordenadas_origen[0], coordenadas_destino[0]],
+        "Longitud": [coordenadas_origen[1], coordenadas_destino[1]]
+    })
+
+    # Crear el mapa con los dos puntos
+    fig = px.scatter_mapbox(
+        df, lat="Latitud", lon="Longitud", zoom=5, height=600, text="Lugar"
+    )
+
+    # Añadir la línea que conecta los dos puntos
+    fig.add_scattermapbox(
+        lat=[coordenadas_origen[0], coordenadas_destino[0]],  # Latitudes de origen y destino
+        lon=[coordenadas_origen[1], coordenadas_destino[1]],  # Longitudes de origen y destino
+        mode="lines",
+        line=dict(width=2, color="blue"),
+        name="Línea de conexión"
+    )
+
+    fig.update_layout(mapbox_style="open-street-map")
+
+    # Mostrar el gráfico en la aplicación
+    st.plotly_chart(fig)
+
+    # Mostrar la distancia entre los dos lugares
+    st.write(f"La distancia entre {origen} y {destino} es de aproximadamente {distancia:.2f} km.")
+
 # Pestaña: Dónde (modificada)
 with tabs[2]:
     st.header("¿Dónde?")
@@ -298,7 +274,21 @@ with tabs[2]:
         except Exception as e:
             st.error(f"Error al obtener las coordenadas: {e}")
 
-        
+# Función para crear gráfico de Gantt usando Plotly Timeline
+def crear_grafico_gantt(eventos):
+    fig = px.timeline(
+        eventos,
+        x_start="Fecha de Inicio", 
+        x_end="Fecha de Fin", 
+        y="Evento", 
+        color='Categoría',  # Esto es opcional si deseas agregar categorías para colorear las tareas
+        title='Gráfico de Gantt de Eventos'
+    )
+
+    fig.update_yaxes(autorange="reversed")  # Invertir el eje y para que las tareas se vean de arriba hacia abajo
+    fig.update_layout(height=600, width=900)  # Ajustar el tamaño del gráfico
+    st.plotly_chart(fig)
+
 with tabs[3]:
     st.header("¿Cuándo?")
 
