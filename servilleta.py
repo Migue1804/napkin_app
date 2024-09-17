@@ -97,7 +97,7 @@ with tabs[0]:
     
     4. **Cuándo (Línea de Tiempo):** Para mostrar secuencias temporales, la línea de tiempo es el gráfico recomendado para organizar eventos de manera clara y ordenada.
     
-    Cada uno de estos gráficos no solo sigue el marco de las 6W, sino que también se ajusta al modelo SQVID para ayudar a presentar la información de forma visualmente efectiva.
+    5. **Por qué (Gráfico de Burbujas):** El gráfico de burbujas permite analizar múltiples variables simultáneamente, destacando cómo las categorías se comparan en función de varias dimensiones (eje X, eje Y, tamaño y color de las burbujas). Esta visualización es útil para explorar las razones subyacentes y patrones complejos en los datos, facilitando la comprensión de cómo diferentes variables se relacionan entre sí.
     """
     st.markdown(explicacion_graficos) 
 
