@@ -641,7 +641,7 @@ with tabs[7]:
     st.write("""
     - **Grand Master MBA Dirección de Negocio Digital**, TECH Universidad (ene. 2021 - feb. 2023)
     
-    - **Ingeniero Químico**, Universidad de Carabobo (ago. 1998 - abr. 2004)
+    - **Ingeniero Químico**, Universidad de Carabobo (ago. 2000 - ago. 2007)
     
     - **Certificaciones y Formación Adicional**:
       - Lean Six Sigma
