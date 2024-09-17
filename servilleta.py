@@ -12,6 +12,7 @@ import osmnx as ox
 from geopy.distance import geodesic
 import streamlit.components.v1 as components
 import matplotlib.colors as mcolors
+import plotly.graph_objects as go
 
 # Configuración de la aplicación
 st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
@@ -154,75 +155,91 @@ with tabs[0]:
     if nombre:
         crear_grafico_quien_que(nombre, categorias, imagen)
         
-# Función para crear gráfico de Pareto
-def crear_grafico_pareto(datos):
+# Función para crear gráfico de Pareto con Plotly
+def crear_grafico_pareto_plotly(datos):
     # Ordenar los datos de mayor a menor
     datos = datos.sort_values(by='Valor', ascending=False).reset_index(drop=True)
-    
+
     # Calcular el valor acumulado y su porcentaje
     datos['Acumulado'] = datos['Valor'].cumsum()
     total = datos['Valor'].sum()
     datos['% Valor'] = datos['Valor'] / total * 100
     datos['% Acumulado'] = datos['Acumulado'] / total * 100
-    
-    # Crear gráfico de Pareto
-    fig, ax1 = plt.subplots(figsize=(10, 6))
-    
-    # Crear colormap para las barras
-    norm = mcolors.Normalize(vmin=datos['Valor'].min(), vmax=datos['Valor'].max())
-    cmap = plt.get_cmap('inferno')  # Puedes cambiar 'inferno' por otro colormap
-    
-    # Ajustar el ancho de las barras para que no haya separación
-    ancho_barras = 1.0
-    
-    # Gráfico de barras con colores de heatmap
-    bars = ax1.bar(datos['Categoría'], datos['% Valor'], color=cmap(norm(datos['Valor'])), width=ancho_barras)
-    ax1.set_ylabel('Porcentaje del Valor')
-    ax1.set_xlabel('Categoría')
-    ax1.tick_params(axis='x', rotation=45)
-    ax1.set_ylim(0, 100)  # Configurar el rango del eje y
-    
-    # Crear un segundo eje para la línea acumulada
-    ax2 = ax1.twinx()
-    ax2.plot(datos['Categoría'], datos['% Acumulado'], color='red', marker='D', linestyle='-', label='Porcentaje Acumulado')
-    ax2.axhline(80, color='gray', linestyle='--')  # Línea que marca el 80%
-    ax2.set_ylabel('Porcentaje Acumulado')
-    ax2.set_ylim(0, 100)  # Configurar el rango del eje y
-    
-    # Añadir leyenda y etiquetas
-    plt.title('Gráfico de Pareto')
-    ax2.legend(loc='best')
-    
-    # Añadir barra de color
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
-    cbar = plt.colorbar(sm, ax=ax1, orientation='vertical')
-    cbar.set_label('Valor')
-    
-    st.pyplot(fig)
-    
-# Pestaña: Cuánto (modificada)
-with tabs[1]:
-    st.header("¿Cuánto?")
-    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
-    st.sidebar.subheader("Ingresos de datos del ¿Cuánto?:")    
-    
-    example_data = {
-        "Categoría": ["A", "B", "C", "D", "E", "F"],
-        "Valor": [10, 40, 20, 15, 5, 2]
-    }
-    example_df = pd.DataFrame(example_data)
-    
-    # Mostrar ejemplo de datos en el sidebar
-    st.sidebar.write("Ingrese las categorías y valores en el siguiente formato:")
-    
-    # Permitir al usuario editar el DataFrame
-    df_cuanto = st.sidebar.data_editor(example_df, num_rows="dynamic", key="df_cuanto")
 
-    # Verificar si el DataFrame tiene datos antes de generar el gráfico
-    if not df_cuanto.empty:
-        # Llamada a la función para crear el gráfico de Pareto
-        crear_grafico_pareto(df_cuanto)
+    # Crear heatmap para las barras
+    colorscale = 'Inferno'
+    heatmap_colors = datos['Valor'] / datos['Valor'].max()  # Normalizar valores para el colormap
+
+    # Crear gráfico de barras
+    fig = go.Figure()
+
+    # Agregar las barras del gráfico
+    fig.add_trace(go.Bar(
+        x=datos['Categoría'],
+        y=datos['% Valor'],
+        marker=dict(
+            color=heatmap_colors,
+            colorscale=colorscale,
+            showscale=True,  # Mostrar barra de colores
+            colorbar=dict(title="Valor")
+        ),
+        name='Porcentaje del Valor',
+    ))
+
+    # Agregar la línea de porcentaje acumulado
+    fig.add_trace(go.Scatter(
+        x=datos['Categoría'],
+        y=datos['% Acumulado'],
+        mode='lines+markers',
+        marker=dict(color='red', symbol='diamond'),
+        line=dict(color='red', width=2),
+        name='Porcentaje Acumulado',
+    ))
+
+    # Agregar línea del 80%
+    fig.add_shape(
+        type="line",
+        x0=0, x1=1, y0=80, y1=80,
+        line=dict(color="gray", width=2, dash="dash"),
+        xref="paper", yref="y2"  # Línea horizontal en el segundo eje
+    )
+
+    # Configurar el diseño del gráfico
+    fig.update_layout(
+        title='Gráfico de Pareto',
+        xaxis=dict(title='Categoría', tickangle=-45),
+        yaxis=dict(title='Porcentaje del Valor', range=[0, 100], showgrid=False),
+        yaxis2=dict(title='Porcentaje Acumulado', overlaying='y', side='right', range=[0, 100]),
+        height=600,
+        legend=dict(x=0.85, y=1.15),
+    )
+
+    # Mostrar el gráfico en la app Streamlit
+    st.plotly_chart(fig)
+
+# Pestaña: '¿Cuánto?'
+with tabs[3]:
+    st.header("¿Cuánto?")
+    st.sidebar.subheader("Datos del gráfico de Pareto:")
+
+    # Entrada de datos para el gráfico de Pareto en el sidebar
+    st.sidebar.write("Ingrese los datos para generar el gráfico de Pareto:")
+
+    # Crear un DataFrame editable para ingresar los datos
+    example_data = {
+        'Categoría': ['A', 'B', 'C', 'D', 'E', 'F'],
+        'Valor': [50, 30, 20, 10, 5, 3]
+    }
+    
+    # Crear DataFrame con datos de ejemplo
+    df_pareto = pd.DataFrame(example_data)
+    
+    # Data editor en el sidebar
+    df_pareto = st.sidebar.data_editor(df_pareto, num_rows="dynamic", key="df_pareto")
+
+    # Mostrar gráfico solo si hay datos
+    if not df_pareto.empty:
+        crear_grafico_pareto_plotly(df_pareto)
 
 # Función para obtener las coordenadas de un lugar utilizando OSMNX
 def obtener_coordenadas_lugar(lugar):
