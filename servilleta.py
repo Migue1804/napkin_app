@@ -67,7 +67,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     categoria_colores = {
         'Categoría 1': 'lightblue',
         'Categoría 2': 'lightgreen',
-        'Categoría 3': 'lightcoral',
+        'Categoría 3': 'lightpurple',
         'Categoría 4': 'lightgoldenrodyellow',
     }
 
@@ -83,7 +83,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
                 "shape": "circularImage" if node[1].get('image', '') else "circle",
                 "image": node[1].get('image', ''),
                 "color": color,
-                "size": 70,  # Tamaño más grande para el nodo central
+                "size": 80,  # Tamaño más grande para el nodo central
                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
             }
         else:
@@ -91,7 +91,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
                 "label": node[0],
                 "shape": "circle",
                 "color": color,
-                "size": 30,  # Tamaño más pequeño para los nodos secundarios
+                "size": 10,  # Tamaño más pequeño para los nodos secundarios
                 "fixed": {"x": False, "y": False}  # Mantener el nodo fijo en tamaño, no en posición
             }
         person_net.add_node(node[0], **node_options)
@@ -138,8 +138,8 @@ with tabs[0]:
     # Crear DataFrame editable para las categorías
     example_data = {
         "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
-        "Categoría 2": ["Control de procesos", "Razonamiento abstracto", "Cálculo matemático", "Análisis de datos", "Storytelling", "Programación"],
-        "Categoría 3": ["Esposo", "Papá", "Hijo mayor", "Músico amateur"],
+        "Categoría 2": ["Procesos", "Razonamiento", "Cálculo", "Datos", "Storytelling", "Programación"],
+        "Categoría 3": ["Esposo", "Padre", "Hijo", "Músico"],
         "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
     }
     df_categorias = pd.DataFrame.from_dict(example_data, orient='index').transpose()
