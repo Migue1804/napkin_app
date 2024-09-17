@@ -173,7 +173,7 @@ with tabs[0]:
     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
 
     # Entrada de texto para el nombre
-    nombre = st.sidebar.text_input("Ingrese el nombre:")
+    nombre = st.sidebar.text_input("Ingrese el nombre:","Ai-ngineering")
 
     # Cargar una imagen
     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
@@ -184,7 +184,7 @@ with tabs[0]:
 
     # Crear DataFrame editable para las categorías
     example_data = {
-        "Categoría 1": ["Ingeniería Química", "Big Data Analytics", "MBA en Negocios Digitales"],
+        "Categoría 1": ["Ingeniero", "Big Data", "MBA"],
         "Categoría 2": ["Control de procesos", "Razonamiento abstracto", "Cálculo matemático", "Análisis de datos", "Storytelling", "Programación"],
         "Categoría 3": ["Esposo", "Papá", "Hijo mayor", "Músico amateur"],
         "Categoría 4": ["Venezuela", "Colombia", "Ecuador", "México", "Brasil"]
