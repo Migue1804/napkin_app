@@ -23,7 +23,7 @@ st.image('Napkin App.png', use_column_width=True)
 tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
 
 # Pestaña: Reseña del libro
-with tabs[6]:
+with tabs[0]:
     st.header("Reseña del Libro")
 
     # Resumen del libro
@@ -83,10 +83,10 @@ with tabs[6]:
     st.text_area("Resumen del libro", resumen, height=400)
 
     # Explicación en audio precargada
-    #st.subheader("Explicación en audio del libro")
+    st.subheader("AI Podcast del libro (EN)")
     
     # Ruta del archivo de audio precargado
-    #audio_path = "ruta_al_archivo/audio.mp3"  # Cambia esta ruta al archivo correcto
+    #audio_path = "servilleta_podcast.mp3"  # Cambia esta ruta al archivo correcto
     #audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
 
     # Reproducir el archivo de audio
@@ -210,7 +210,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     components.html(graph_html, height=600)
 
 # Pestaña: Quién/Qué
-with tabs[0]:
+with tabs[1]:
     st.header("¿Quién/Qué?")
     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
 
@@ -294,7 +294,7 @@ def crear_grafico_pareto(datos):
     st.pyplot(fig)
     
 # Pestaña: Cuánto (modificada)
-with tabs[1]:
+with tabs[2]:
     st.header("¿Cuánto?")
     # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
     st.sidebar.subheader("Ingresos de datos del ¿Cuánto?:")    
@@ -359,7 +359,7 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
     st.write(f"La distancia entre {origen} y {destino} es de aproximadamente {distancia:.2f} km.")
 
 # Pestaña: Dónde (modificada)
-with tabs[2]:
+with tabs[3]:
     st.header("¿Dónde?")
     # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
     st.sidebar.subheader("Ingresos de datos del ¿Dónde?:")    
@@ -392,7 +392,7 @@ def crear_grafico_gantt(eventos):
     fig.update_layout(height=600, width=900)  # Ajustar el tamaño del gráfico
     st.plotly_chart(fig)
 
-with tabs[3]:
+with tabs[4]:
     st.header("¿Cuándo?")
 
     # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
@@ -419,14 +419,8 @@ with tabs[3]:
         # Crear gráfico Gantt a partir del DataFrame ingresado
         crear_grafico_gantt(df_tareas)
 
-import streamlit as st
-import pandas as pd
-import networkx as nx
-from pyvis.network import Network
-import streamlit.components.v1 as components
-
 # Pestaña: Cómo (modificada para diagrama de flujo con nodos de inicio y fin)
-with tabs[4]:
+with tabs[5]:
     st.header("¿Cómo?")
     
     # Ingreso de datos de las actividades en el sidebar
@@ -555,7 +549,7 @@ with tabs[4]:
     st.markdown('- **Espera:** <img src="https://img.icons8.com/fluency/48/000000/hourglass.png" width="30"/>', unsafe_allow_html=True)
 
 # Pestaña: Por qué
-with tabs[5]:
+with tabs[6]:
     st.header("¿Por qué?")
     st.sidebar.subheader("Ingresos de datos del ¿Por qué?:")
     
