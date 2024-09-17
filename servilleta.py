@@ -393,35 +393,49 @@ with tabs[3]:
             crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_destino)
         except Exception as e:
             st.error(f"Error al obtener las coordenadas: {e}")
-            
+
 # Función para crear gráfico de Gantt usando Plotly Timeline
 def crear_grafico_gantt(eventos):
+    # Crear el gráfico de Gantt con Plotly
     fig = px.timeline(
         eventos,
         x_start="Fecha de Inicio", 
         x_end="Fecha de Fin", 
         y="Evento", 
-        color='Categoría',  # Esto es opcional si deseas agregar categorías para colorear las tareas
+        color='Categoría',  # Categorías para colorear las tareas
         title='Gráfico de Gantt de Eventos'
     )
 
-    fig.update_yaxes(autorange="reversed")  # Invertir el eje y para que las tareas se vean de arriba hacia abajo
-    fig.update_layout(height=600, width=900)  # Ajustar el tamaño del gráfico
+    # Añadir el porcentaje de realización como etiquetas en el gráfico
+    for i, row in eventos.iterrows():
+        fig.add_annotation(
+            x=row['Fecha de Fin'], 
+            y=row['Evento'],
+            text=f"{row['Porcentaje de Realización']}% completado", 
+            showarrow=False,
+            font=dict(size=12, color='white'),
+            bgcolor="green" if row['Porcentaje de Realización'] == 100 else "blue",
+            bordercolor="black",
+            xanchor='left'
+        )
+
+    fig.update_yaxes(autorange="reversed")  # Invertir el eje Y
+    fig.update_layout(height=600, width=900)  # Ajustar tamaño del gráfico
     st.plotly_chart(fig)
 
 with tabs[4]:
     st.header("¿Cuándo?")
 
-    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
+    # Ejemplo de datos ampliados en DataFrame
     st.sidebar.subheader("Ingresos de datos del ¿Cuándo?:")
     example_data = {
-        "Evento": ["Proyecto Inicio", "Desarrollo", "Fin"],
-        "Fecha de Inicio": ["2023-01-01", "2023-06-01", "2023-09-01"],
-        "Fecha de Fin": ["2023-06-01", "2023-09-01", "2023-12-01"],
-        "Categoría": ["Planificación", "Ejecución", "Cierre"]
+        "Evento": ["Proyecto Inicio", "Análisis de Requisitos", "Desarrollo", "Pruebas", "Implementación", "Cierre"],
+        "Fecha de Inicio": ["2023-01-01", "2023-02-01", "2023-06-01", "2023-08-01", "2023-10-01", "2023-11-01"],
+        "Fecha de Fin": ["2023-02-01", "2023-06-01", "2023-08-01", "2023-10-01", "2023-11-01", "2023-12-01"],
+        "Categoría": ["Planificación", "Análisis", "Desarrollo", "Pruebas", "Implementación", "Cierre"],
+        "Porcentaje de Realización": [100, 100, 80, 50, 20, 0]  # Porcentajes de realización
     }
     example_df = pd.DataFrame(example_data)
-    #st.sidebar.write(example_df)
 
     # Ingreso de datos de tareas mediante un DataFrame editable
     st.sidebar.write("Ingrese los datos de las tareas en el siguiente formato:")
@@ -435,7 +449,52 @@ with tabs[4]:
 
         # Crear gráfico Gantt a partir del DataFrame ingresado
         crear_grafico_gantt(df_tareas)
+    
     st.markdown("Para más información consulta en: [Gantt chart](https://www.apm.org.uk/resources/find-a-resource/gantt-chart/)")
+
+
+# # Función para crear gráfico de Gantt usando Plotly Timeline
+# def crear_grafico_gantt(eventos):
+#     fig = px.timeline(
+#         eventos,
+#         x_start="Fecha de Inicio", 
+#         x_end="Fecha de Fin", 
+#         y="Evento", 
+#         color='Categoría',  # Esto es opcional si deseas agregar categorías para colorear las tareas
+#         title='Gráfico de Gantt de Eventos'
+#     )
+
+#     fig.update_yaxes(autorange="reversed")  # Invertir el eje y para que las tareas se vean de arriba hacia abajo
+#     fig.update_layout(height=600, width=900)  # Ajustar el tamaño del gráfico
+#     st.plotly_chart(fig)
+
+# with tabs[4]:
+#     st.header("¿Cuándo?")
+
+#     # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
+#     st.sidebar.subheader("Ingresos de datos del ¿Cuándo?:")
+#     example_data = {
+#         "Evento": ["Proyecto Inicio", "Desarrollo", "Fin"],
+#         "Fecha de Inicio": ["2023-01-01", "2023-06-01", "2023-09-01"],
+#         "Fecha de Fin": ["2023-06-01", "2023-09-01", "2023-12-01"],
+#         "Categoría": ["Planificación", "Ejecución", "Cierre"]
+#     }
+#     example_df = pd.DataFrame(example_data)
+#     #st.sidebar.write(example_df)
+
+#     # Ingreso de datos de tareas mediante un DataFrame editable
+#     st.sidebar.write("Ingrese los datos de las tareas en el siguiente formato:")
+#     df_tareas = st.sidebar.data_editor(example_df, num_rows="dynamic", key="df_gantt")
+
+#     # Verificar que el DataFrame tiene datos para generar el gráfico
+#     if not df_tareas.empty:
+#         # Convertir las columnas de fechas a formato de fecha
+#         df_tareas['Fecha de Inicio'] = pd.to_datetime(df_tareas['Fecha de Inicio'])
+#         df_tareas['Fecha de Fin'] = pd.to_datetime(df_tareas['Fecha de Fin'])
+
+#         # Crear gráfico Gantt a partir del DataFrame ingresado
+#         crear_grafico_gantt(df_tareas)
+#     st.markdown("Para más información consulta en: [Gantt chart](https://www.apm.org.uk/resources/find-a-resource/gantt-chart/)")
     
 # Pestaña: Cómo (modificada con el diagrama de flujo con simbología ANSI)
 with tabs[5]:
