@@ -223,8 +223,8 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
     with open(f'{path}/pyvis_graph.html', 'r', encoding='utf-8') as HtmlFile:
         graph_html = HtmlFile.read()
 
-    # Mostrar grafo en la app con Streamlit Components
-    components.html(graph_html, height=600)
+    # Mostrar grafo en la app con Streamlit Components con ancho responsivo
+    components.html(graph_html, height=600, width="100%")
 
 # # Función para crear el gráfico Quién/Qué con varias capas de atributos
 # def crear_grafico_quien_que(nombre, categorias, imagen):
