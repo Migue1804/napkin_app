@@ -65,10 +65,10 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
 
     # Definir colores para las categorías
     categoria_colores = {
-        'Categoría 1': 'lightblue',
-        'Categoría 2': 'lightgreen',
-        'Categoría 3': 'lightpurple',
-        'Categoría 4': 'lightgoldenrodyellow',
+        'Categoría 1': '#1f77b4',  # Azul oscuro
+        'Categoría 2': '#2ca02c',  # Verde oscuro
+        'Categoría 3': '#9467bd',  # Púrpura oscuro
+        'Categoría 4': '#bcbd22',  # Amarillo oliva oscuro
     }
 
     # Configurar los nodos con imágenes, colores y tamaños
