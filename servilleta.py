@@ -248,42 +248,20 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
     })
 
     # Crear el mapa con los dos puntos
-    fig = go.Figure()
-
-    # Añadir los puntos de origen y destino
-    fig.add_trace(go.Scattermapbox(
-        lat=df["Latitud"],
-        lon=df["Longitud"],
-        mode="markers+text",
-        text=df["Lugar"],
-        textposition="top right",
-        marker=dict(size=10, color="red"),
-        name="Lugares"
-    ))
+    fig = px.scatter_mapbox(
+        df, lat="Latitud", lon="Longitud", zoom=5, height=600, text="Lugar"
+    )
 
     # Añadir la línea que conecta los dos puntos
-    fig.add_trace(go.Scattermapbox(
+    fig.add_scattermapbox(
         lat=[coordenadas_origen[0], coordenadas_destino[0]],  # Latitudes de origen y destino
         lon=[coordenadas_origen[1], coordenadas_destino[1]],  # Longitudes de origen y destino
         mode="lines",
-        line=dict(width=4, color="blue"),  # Ancho de línea aumentado a 4
+        line=dict(width=2, color="blue"),
         name="Línea de conexión"
-    ))
-
-    # Añadir una flecha entre el origen y el destino (en realidad, no hay un símbolo de flecha en Scattermapbox, 
-    # pero se puede simular con el tamaño del marcador y la línea)
-    fig.add_trace(go.Scattermapbox(
-        lat=[coordenadas_origen[0], coordenadas_destino[0]],
-        lon=[coordenadas_origen[1], coordenadas_destino[1]],
-        mode="markers",
-        marker=dict(size=10, color="blue"),
-        name="Flecha"
-    ))
-
-    fig.update_layout(
-        mapbox_style="open-street-map",
-        showlegend=False  # Ocultar la leyenda
     )
+
+    fig.update_layout(mapbox_style="open-street-map")
 
     # Mostrar el gráfico en la aplicación
     st.plotly_chart(fig)
@@ -294,7 +272,8 @@ def crear_grafico_lugares(origen, destino, coordenadas_origen, coordenadas_desti
 # Pestaña: Dónde (modificada)
 with tabs[2]:
     st.header("¿Dónde?")
-    st.sidebar.subheader("Ingresos de datos del ¿Dónde?:")
+    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
+    st.sidebar.subheader("Ingresos de datos del ¿Dónde?:")    
     # Ingreso de las ubicaciones de origen y destino
     origen = st.sidebar.text_input("Ingrese el lugar de origen:", "Valencia, Venezuela")
     destino = st.sidebar.text_input("Ingrese el lugar de destino:", "Medellín, Colombia")
