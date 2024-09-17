@@ -7,3 +7,4 @@ pyvis
 Pillow
 osmnx
 geopy
+graphviz
