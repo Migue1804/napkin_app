@@ -91,12 +91,16 @@ st.sidebar.title("Datos de Entrada")
 # Tabs para cada tipo de problema
 tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
 
-# Función para convertir una imagen en base64
+# Función para cargar imagen y convertirla en base64
 def get_image_base64(image):
-    buffered = BytesIO()
-    image.save(buffered, format="PNG")  # Asegúrate de que la imagen se guarde en el formato correcto
-    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    return f"data:image/png;base64,{img_str}"
+    if isinstance(image, str):  # Si la imagen es una ruta
+        with open(image, "rb") as image_file:
+            return "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
+    elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")  # Convertir imagen a bytes
+        return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return None
     
 # Función para crear el gráfico Quién/Qué con varias capas de atributos
 def crear_grafico_quien_que(nombre, categorias, imagen):
