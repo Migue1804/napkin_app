@@ -91,12 +91,10 @@ st.sidebar.title("Datos de Entrada")
 # Tabs para cada tipo de problema
 tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
 
-# Función para convertir una imagen a base64
-def get_image_base64(image):
-    buffered = io.BytesIO()
-    image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    return f"data:image/png;base64,{img_str}"
+# Función para cargar imagen y convertirla en base64
+def get_image_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
 
 # Función para crear el gráfico Quién/Qué con varias capas de atributos
 def crear_grafico_quien_que(nombre, categorias, imagen):
@@ -131,7 +129,6 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
         'Categoría 2': 'lightgreen',
         'Categoría 3': 'lightcoral',
         'Categoría 4': 'lightgoldenrodyellow',
-        # Añadir más categorías y colores según sea necesario
     }
 
     # Configurar los nodos con imágenes y colores
@@ -166,18 +163,21 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
 
     # Mostrar grafo en la app
     components.html(HtmlFile.read(), height=600)
-    
+
 # Pestaña: Quién/Qué
 with tabs[0]:
     st.header("¿Quién/Qué?")
     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
-
+    
     # Entrada de texto para el nombre
-    nombre = st.sidebar.text_input("Ingrese el nombre:","Ai-ngineering")
-
+    nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
+    
+    # Imagen predeterminada si no se carga ninguna
+    imagen_predeterminada = "ruta_a_tu_imagen_predeterminada.jpg"
+    
     # Cargar una imagen
     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
-    imagen = Image.open(imagen_subida) if imagen_subida else None
+    imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
 
     # Ingreso de categorías y atributos
     st.sidebar.write("Ingrese las diferentes categorías y atributos:")
@@ -200,7 +200,7 @@ with tabs[0]:
     # Mostrar el gráfico solo si se ha ingresado un nombre
     if nombre:
         crear_grafico_quien_que(nombre, categorias, imagen)
-
+        
 # Función para crear gráfico de Pareto
 def crear_grafico_pareto(datos):
     # Ordenar los datos de mayor a menor
