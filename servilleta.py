@@ -105,13 +105,12 @@ with tabs[0]:
     st.subheader("AI Podcast del libro (EN)")
     
     # Ruta del archivo de audio precargado
-    #audio_path = "servilleta_podcast.mp3"  # Cambia esta ruta al archivo correcto
-    #audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
+    audio_path = "Napkin_podcast.mp3"  # Cambia esta ruta al archivo correcto
+    audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
 
     # Reproducir el archivo de audio
-    #st.audio(audio_file, format="audio/mp3")
+    st.audio(audio_file, format="audio/mp3")
 
-    # Sección para explicar la elección de los gráficos
 
 # Sidebar
 st.sidebar.title("Datos de Entrada")
