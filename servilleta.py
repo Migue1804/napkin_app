@@ -605,35 +605,36 @@ with tabs[7]:
     st.header("Acerca de mí")
     
     st.subheader("José Miguel Aguilar Torrealba")
-    st.write("**Chemical Engineer | MBA Digital Business Administration | Innovation & CI facilitator | Coaching | Citizen Data Scientist | Lean Six Sigma | Integrated management systems auditor**")
+    st.write("**Chemical Engineer | MBA Digital Business Administration | Innovation & CI Facilitator | Coaching | Citizen Data Scientist | Lean Six Sigma | Integrated Management Systems Auditor**")
     
     st.subheader("Acerca de")
     st.write("""
-    Con 20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en el desarrollo e implementación de modelos de mejora continua, excelencia operacional y proyectos de infraestructura y tecnología. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
+    Con 20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en modelos de mejora continua, excelencia operacional y proyectos de tecnología e infraestructura. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
     """)
     
     st.subheader("Experiencia Profesional")
     st.write("""
-    - **Continuous Improvement Manager** en AkzoNobel (abr. 2022 - actualidad)
-      Implemento modelos globales de mejora continua, planeo y ejecuto iniciativas de ahorro, y transfiero buenas prácticas entre operaciones.
+    - **Continuous Improvement Manager** en AkzoNobel (abr. 2022 - actualidad): Implementación de modelos globales de mejora continua, gestión de iniciativas de ahorro y transferencia de buenas prácticas.
     
-    - **SR Continuous Improvement Coordinator** en Andercol SAS (feb. 2016 - abr. 2022)
-      Diseñé modelos y estrategias de mejora, y lideré iniciativas de ahorro y excelencia operacional regional.
+    - **SR Continuous Improvement Coordinator** en Andercol SAS (feb. 2016 - abr. 2022): Diseño de estrategias de mejora, Industria 4.0 y Big Data, y gestión de la excelencia operacional regional.
     
-    - **Senior Process & Project Coordinator** en C.A. Venezolana de Pinturas (feb. 2014 - ene. 2016)
-      Controlé productos y procesos, y ejecuté proyectos para optimizar la producción y reducir el impacto ambiental.
+    - **Senior Process & Project Coordinator** en C.A. Venezolana de Pinturas (feb. 2014 - ene. 2016): Control de productos y procesos, reducción del impacto ambiental y optimización de la producción.
     
-    - **Process Engineer** en C.A. QUIMICA INTEGRADA -INTEQUIM- (may. 2010 - feb. 2014)
-      Coordiné mejoras a procesos y equipos para optimizar la productividad y calidad de los productos.
+    - **Process Engineer** en C.A. QUIMICA INTEGRADA -INTEQUIM- (may. 2010 - feb. 2014): Coordinación de mejoras en procesos y equipos para optimizar la productividad.
     
-    - **Seminary Professor** en Universidad de Carabobo (sept. 2009 - sept. 2010)
-      Facilitador de nuevas tendencias en ingeniería química y mejoramiento continuo.
+    - **Seminary Professor** en Universidad de Carabobo (sept. 2009 - sept. 2010): Facilitación de nuevas tendencias en ingeniería química y mejoramiento continuo.
     
-    - **CI & Quality Advisor** en Palma Products International C.A. (nov. 2009 - abr. 2010)
-      Encargado de la reingeniería del SGC y la implantación de la mejora continua.
+    - **CI & Quality Advisor** en Palma Products International C.A. (nov. 2009 - abr. 2010): Reingeniería del SGC y mejora continua.
     
-    - **Continuous Improvement Engineer** en Ajegroup (ene. 2005 - oct. 2008)
-      Promotor y asesor en la implementación de metodologías Lean Manufacturing, Kaizen, y TPM.
+    - **Continuous Improvement Engineer** en Ajegroup (ene. 2005 - oct. 2008): Implementación de metodologías Lean Manufacturing, Kaizen, y TPM.
+    
+    - **Process Engineer** en Ajegroup (ago. 2006 - nov. 2006): Mejora de sistemas hidráulicos y procesos de producción.
+    
+    - **Quality Auditor** en Ajegroup (nov. 2005 - jul. 2006): Control y auditoría de calidad.
+    
+    - **Continuous Improvement Intern** en Ajegroup (ago. 2004 - nov. 2005): Participación en control estadístico de procesos y Lean Six Sigma.
+    
+    - **Analytical Chemistry Trainer** en Universidad de Carabobo (mar. 2004 - nov. 2005): Entrenador en química analítica y asistente del profesor.
     """)
 
     st.subheader("Formación")
