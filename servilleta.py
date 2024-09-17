@@ -179,7 +179,7 @@ with tabs[0]:
     nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
 
     # Imagen predeterminada si no se carga ninguna
-    imagen_predeterminada = "ruta_a_tu_imagen_predeterminada.jpg"
+    imagen_predeterminada = "perfil.jpg"
 
     # Cargar una imagen
     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
