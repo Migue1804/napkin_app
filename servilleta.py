@@ -81,18 +81,8 @@ with tabs[0]:
     para la resolución de problemas y la comunicación efectiva.
     """
     #st.text_area("Resumen del libro", resumen, height=400)
-    st.markdown("Resumen del libro", resumen, height=800)
-    # Explicación en audio precargada
-    st.subheader("AI Podcast del libro (EN)")
+    st.markdown(resumen)
     
-    # Ruta del archivo de audio precargado
-    #audio_path = "servilleta_podcast.mp3"  # Cambia esta ruta al archivo correcto
-    #audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
-
-    # Reproducir el archivo de audio
-    #st.audio(audio_file, format="audio/mp3")
-
-    # Sección para explicar la elección de los gráficos
     st.subheader("Razones de la escogencia de los gráficos")
     
     # Ejemplo de razones
@@ -109,8 +99,19 @@ with tabs[0]:
     
     Cada uno de estos gráficos no solo sigue el marco de las 6W, sino que también se ajusta al modelo SQVID para ayudar a presentar la información de forma visualmente efectiva.
     """
-    st.text_area("Describe las razones por las cuales escogiste estos gráficos", explicacion_graficos, height=200)
+    st.markdown(explicacion_graficos) 
 
+    # Explicación en audio precargada
+    st.subheader("AI Podcast del libro (EN)")
+    
+    # Ruta del archivo de audio precargado
+    #audio_path = "servilleta_podcast.mp3"  # Cambia esta ruta al archivo correcto
+    #audio_file = open(audio_path, "rb").read()  # Cargar el archivo de audio
+
+    # Reproducir el archivo de audio
+    #st.audio(audio_file, format="audio/mp3")
+
+    # Sección para explicar la elección de los gráficos
 
 # Sidebar
 st.sidebar.title("Datos de Entrada")
