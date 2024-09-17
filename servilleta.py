@@ -20,7 +20,7 @@ st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 st.image('Napkin App.png', use_column_width=True)
 
 # Agregar una nueva pestaña para la reseña del libro
-tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
+tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué","Acerca de mí"])
 
 # Pestaña: Reseña del libro
 with tabs[0]:
@@ -599,3 +599,53 @@ with tabs[6]:
             st.plotly_chart(fig)
         else:
             st.error("Algunas de las columnas ingresadas no existen en el DataFrame. Verifique los nombres.")
+
+# Pestaña: Acerca de mí
+with tabs[7]:
+    st.header("Acerca de mí")
+    
+    st.subheader("José Miguel Aguilar Torrealba")
+    st.write("**Chemical Engineer | MBA Digital Business Administration | Innovation & CI facilitator | Coaching | Citizen Data Scientist | Lean Six Sigma | Integrated management systems auditor**")
+    
+    st.subheader("Acerca de")
+    st.write("""
+    Con 20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en el desarrollo e implementación de modelos de mejora continua, excelencia operacional y proyectos de infraestructura y tecnología. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
+    """)
+    
+    st.subheader("Experiencia Profesional")
+    st.write("""
+    - **Continuous Improvement Manager** en AkzoNobel (abr. 2022 - actualidad)
+      Implemento modelos globales de mejora continua, planeo y ejecuto iniciativas de ahorro, y transfiero buenas prácticas entre operaciones.
+    
+    - **SR Continuous Improvement Coordinator** en Andercol SAS (feb. 2016 - abr. 2022)
+      Diseñé modelos y estrategias de mejora, y lideré iniciativas de ahorro y excelencia operacional regional.
+    
+    - **Senior Process & Project Coordinator** en C.A. Venezolana de Pinturas (feb. 2014 - ene. 2016)
+      Controlé productos y procesos, y ejecuté proyectos para optimizar la producción y reducir el impacto ambiental.
+    
+    - **Process Engineer** en C.A. QUIMICA INTEGRADA -INTEQUIM- (may. 2010 - feb. 2014)
+      Coordiné mejoras a procesos y equipos para optimizar la productividad y calidad de los productos.
+    
+    - **Seminary Professor** en Universidad de Carabobo (sept. 2009 - sept. 2010)
+      Facilitador de nuevas tendencias en ingeniería química y mejoramiento continuo.
+    
+    - **CI & Quality Advisor** en Palma Products International C.A. (nov. 2009 - abr. 2010)
+      Encargado de la reingeniería del SGC y la implantación de la mejora continua.
+    
+    - **Continuous Improvement Engineer** en Ajegroup (ene. 2005 - oct. 2008)
+      Promotor y asesor en la implementación de metodologías Lean Manufacturing, Kaizen, y TPM.
+    """)
+
+    st.subheader("Formación")
+    st.write("""
+    - **Grand Master MBA Dirección de Negocio Digital**, TECH Universidad (ene. 2021 - feb. 2023)
+    
+    - **Ingeniero Químico**, Universidad de Carabobo (ago. 1998 - abr. 2004)
+    
+    - **Certificaciones y Formación Adicional**:
+      - Lean Six Sigma
+      - Big Data
+      - Transformación Digital
+      - Control de Procesos Químicos
+      - Auditoría de Sistemas Integrados de Gestión
+    """)
