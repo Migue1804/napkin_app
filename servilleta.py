@@ -602,12 +602,12 @@ with tabs[6]:
 
 # Pestaña: Acerca de mí
 with tabs[7]:
-    st.header("Acerca de mí")
+    #st.header("Acerca de mí")
     
     st.subheader("José Miguel Aguilar Torrealba")
     st.write("**Chemical Engineer | MBA Digital Business Administration | Innovation & CI Facilitator | Coaching | Citizen Data Scientist | Lean Six Sigma | Integrated Management Systems Auditor**")
     
-    st.subheader("Acerca de")
+    st.subheader("Resumen profesional")
     st.write("""
     Con 20 años de experiencia en los sectores químico, educativo y de alimentos, me especializo en modelos de mejora continua, excelencia operacional y proyectos de tecnología e infraestructura. He trabajado en la industria y en el ámbito académico, facilitando y auditoriando sistemas de gestión.
     """)
