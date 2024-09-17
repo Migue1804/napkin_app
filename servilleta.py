@@ -201,6 +201,29 @@ def crear_grafico_pareto(datos):
     cbar.set_label('Valor')
     
     st.pyplot(fig)
+    
+# Pestaña: Cuánto (modificada)
+with tabs[1]:
+    st.header("¿Cuánto?")
+    # Ejemplo de datos en DataFrame (similar al formato que mencionaste)
+    st.sidebar.subheader("Ingresos de datos del ¿Cuánto?:")    
+    
+    example_data = {
+        "Categoría": ["A", "B", "C", "D", "E", "F"],
+        "Valor": [10, 40, 20, 15, 5, 2]
+    }
+    example_df = pd.DataFrame(example_data)
+    
+    # Mostrar ejemplo de datos en el sidebar
+    st.sidebar.write("Ingrese las categorías y valores en el siguiente formato:")
+    
+    # Permitir al usuario editar el DataFrame
+    df_cuanto = st.sidebar.data_editor(example_df, num_rows="dynamic", key="df_cuanto")
+
+    # Verificar si el DataFrame tiene datos antes de generar el gráfico
+    if not df_cuanto.empty:
+        # Llamada a la función para crear el gráfico de Pareto
+        crear_grafico_pareto(df_cuanto)
 
 # Función para obtener las coordenadas de un lugar utilizando OSMNX
 def obtener_coordenadas_lugar(lugar):
