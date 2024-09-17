@@ -80,8 +80,8 @@ with tabs[0]:
     En resumen, "The Back of the Napkin" ofrece un enfoque práctico para utilizar el pensamiento visual como herramienta 
     para la resolución de problemas y la comunicación efectiva.
     """
-    st.text_area("Resumen del libro", resumen, height=400)
-
+    #st.text_area("Resumen del libro", resumen, height=400)
+    st.markdown("Resumen del libro", resumen, height=800)
     # Explicación en audio precargada
     st.subheader("AI Podcast del libro (EN)")
     
