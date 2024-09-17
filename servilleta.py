@@ -92,9 +92,15 @@ st.sidebar.title("Datos de Entrada")
 tabs = st.tabs(["Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué"])
 
 # Función para cargar imagen y convertirla en base64
-def get_image_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
+def get_image_base64(image):
+    if isinstance(image, str):  # Si la imagen es una ruta
+        with open(image, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode("utf-8")
+    elif isinstance(image, Image.Image):  # Si la imagen es un objeto PIL
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")  # Convertir imagen a bytes
+        return base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return None
 
 # Función para crear el gráfico Quién/Qué con varias capas de atributos
 def crear_grafico_quien_que(nombre, categorias, imagen):
@@ -137,7 +143,7 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
         color = categoria_colores.get(node_categoria, 'gray')  # Color por defecto si no se encuentra la categoría
         node_options = {
             "label": node[0],
-            "shape": "circularImage",
+            "shape": "circularImage" if node[1].get('image', '') else "circle",  # Usa imagen si está disponible
             "image": node[1].get('image', ''),
             "color": color
         }
@@ -168,13 +174,13 @@ def crear_grafico_quien_que(nombre, categorias, imagen):
 with tabs[0]:
     st.header("¿Quién/Qué?")
     st.sidebar.subheader("Ingresos de datos del ¿Quién/Qué?:")
-    
+
     # Entrada de texto para el nombre
     nombre = st.sidebar.text_input("Ingrese el nombre:", "Ai-ngineering")
-    
+
     # Imagen predeterminada si no se carga ninguna
     imagen_predeterminada = "perfil.jpg"
-    
+
     # Cargar una imagen
     imagen_subida = st.sidebar.file_uploader("Cargue una foto", type=["png", "jpg", "jpeg"])
     imagen = Image.open(imagen_subida) if imagen_subida else imagen_predeterminada
