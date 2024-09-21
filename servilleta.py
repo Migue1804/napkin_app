@@ -20,6 +20,35 @@ st.set_page_config(page_title="Visualización de Marcos SCVID", layout="wide")
 # Display the image above the title
 st.image('Napkin App.png', use_column_width=True)
 
+def add_background_local(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded = base64.b64encode(image_file.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        .block-container {{
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Ruta de la imagen local
+image_path = "Servilleta App.jpg"  # Reemplaza con la ruta a tu imagen local
+
+# Aplicar la imagen de fondo
+add_background_local(image_path)
+
 # Agregar una nueva pestaña para la reseña del libro
 tabs = st.tabs([ "Reseña del Libro", "Quién/Qué", "Cuánto", "Dónde", "Cuándo", "Cómo", "Por qué","Acerca de mí"])
 
