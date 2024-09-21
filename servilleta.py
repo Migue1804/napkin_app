@@ -35,7 +35,7 @@ def add_background_local(image_path):
         }}
         .block-container {{
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
+            padding: 50px;
             border-radius: 10px;
         }}
         </style>
